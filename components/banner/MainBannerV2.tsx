@@ -7,8 +7,8 @@ export default function BannerV2() {
         <section
             className="
                 w-full
-                bg-[url('/assets/banner/BannerHomeMobile.png')]
-                lg:bg-[url('/assets/BG3.png')]
+                bg-[url('/assets/banner/BannerHomeMobile.webp')]
+                lg:bg-[url('/assets/BG3.webp')]
                 bg-cover
                 bg-center
                 bg-no-repeat

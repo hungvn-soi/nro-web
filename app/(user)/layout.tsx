@@ -19,7 +19,7 @@ export default function ShopLayout({
                         fixed
                         inset-0
                         -z-20
-                        bg-[url('/assets/BG.png')]
+                        bg-[url('/assets/BG.webp')]
                         bg-cover
                         bg-center
                         bg-no-repeat

@@ -2,7 +2,7 @@ import TitleBannerForm from "./TilebannerForm"
 
 const BannerForm = () =>{
     return (
-        <div className="w-full relative left-1/2 -translate-x-1/2 lg:bg-[url('/assets/banner/bannerNapThe.jpeg')] bg-[url('/assets/banner/BannerHomeMobile.png')] bg-center bg-no-repeat bg-cover">
+        <div className="w-full relative left-1/2 -translate-x-1/2 lg:bg-[url('/assets/banner/bannerNapThe.webp')] bg-[url('/assets/banner/BannerHomeMobile.webp')] bg-center bg-no-repeat bg-cover">
             <div className="min-h-125 flex  justify-around items-center">
                 
                 <TitleBannerForm

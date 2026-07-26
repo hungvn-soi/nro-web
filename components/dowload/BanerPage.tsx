@@ -8,8 +8,8 @@ const BanerPage = () => {
                 w-full
                 h-75
                 lg:h-150
-                lg:bg-[url('/assets/banner/BanerDowload2.png')]
-                bg-[url('/assets/banner/BanerDowload2Mobile.png')]
+                lg:bg-[url('/assets/banner/BanerDowload2.webp')]
+                bg-[url('/assets/banner/BanerDowload2Mobile.webp')]
                 bg-no-repeat
                 bg-cover
                 bg-center
