@@ -43,7 +43,7 @@ const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
             <h1 className="font-bold text-white uppercase   ">2. Chọn hình thức thanh toán</h1>
             <TabsForm
                 data={DataTabs}
-                ClassContent = "mt-3"
+                className = "mt-3"
             />
         </div>
     )
