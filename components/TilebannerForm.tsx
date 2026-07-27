@@ -15,20 +15,21 @@ const TitleBannerForm = ({ classBox, title1, ClassTitle1, title2, subTitle }: IP
                 title1 && (
                     <h1
                         className={`
-                        text-[50px]
-                        md:text-7xl
-                        font-black
-                        uppercase
-                        tracking-wide
-                        bg-linear-to-b
-                        from-yellow-200
-                        via-yellow-400
-                        to-orange-500
-                        bg-clip-text
-                        text-transparent
-                        drop-shadow-[0_4px_0_#7a3d00]
-                        [text-shadow:0_0_18px_rgba(255,200,0,.45)]
-                        ${ClassTitle1}
+                            lg:text-[50px]
+                            md:text-7xl
+                            text-[30px]
+                            font-black
+                            uppercase
+                            tracking-wide
+                            bg-linear-to-b
+                            from-yellow-200
+                            via-yellow-400
+                            to-orange-500
+                            bg-clip-text
+                            text-transparent
+                            drop-shadow-[0_4px_0_#7a3d00]
+                            [text-shadow:0_0_18px_rgba(255,200,0,.45)]
+                            ${ClassTitle1}
                     `}
                     >
                         {title1}
@@ -40,9 +41,11 @@ const TitleBannerForm = ({ classBox, title1, ClassTitle1, title2, subTitle }: IP
                 title2 && (
                     <h2
                         className="
-                        md:mt-2
+                        md:mt-10
                         text-xl
                         md:text-5xl
+                        md:pt-0
+                        pt-6
                         font-extrabold
                         uppercase
                         tracking-wide

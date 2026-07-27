@@ -6,7 +6,7 @@ const EVENTS = [
     {
         id: 1,
         href: "/su-kien/1",
-        image: "/assets/Card/card1.png",
+        image: "/assets/Card/card1.webp",
         title: "X2 EXP CUỐI TUẦN",
         badge: "HOT",
         description: "Tăng x2 kinh nghiệm trong 2 ngày cuối tuần. Đừng bỏ lỡ!",
@@ -15,7 +15,7 @@ const EVENTS = [
     {
         id: 2,
         href: "/su-kien/2",
-        image: "/assets/Card/card1.png",
+        image: "/assets/Card/card1.webp",
         title: "X2 EXP CUỐI TUẦN",
         badge: "NEW",
         description: "Tăng x2 kinh nghiệm trong 2 ngày cuối tuần. Đừng bỏ lỡ!",
@@ -24,7 +24,7 @@ const EVENTS = [
     {
         id: 3,
         href: "/su-kien/3",
-        image: "/assets/Card/card1.png",
+        image: "/assets/Card/card1.webp",
         title: "X2 EXP CUỐI TUẦN",
         badge: "NEW",
         description: "Tăng x2 kinh nghiệm trong 2 ngày cuối tuần. Đừng bỏ lỡ!",
@@ -33,7 +33,7 @@ const EVENTS = [
     {
         id: 4,
         href: "/su-kien/4",
-        image: "/assets/Card/card1.png",
+        image: "/assets/Card/card1.webp",
         title: "X2 EXP CUỐI TUẦN",
         badge: "HOT",
         description: "Tăng x2 kinh nghiệm trong 2 ngày cuối tuần. Đừng bỏ lỡ!",
@@ -42,7 +42,7 @@ const EVENTS = [
     {
         id: 5,
         href: "/su-kien/5",
-        image: "/assets/Card/card1.png",
+        image: "/assets/Card/card1.webp",
         title: "X2 EXP CUỐI TUẦN",
         badge: "HOT",
         description: "Tăng x2 kinh nghiệm trong 2 ngày cuối tuần. Đừng bỏ lỡ!",

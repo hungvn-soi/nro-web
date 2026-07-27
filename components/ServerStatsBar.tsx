@@ -113,7 +113,7 @@ function ServerStatsBar() {
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 divide-y divide-cyan-500/20 sm:grid-cols-2 md:grid-cols-4 md:divide-y-0">
+                <div className="grid grid-cols-2 divide-y divide-cyan-500/20 sm:grid-cols-2 md:grid-cols-4 md:divide-y-0">
                     {STATS.map((stat, index) => (
                         <StatItem
                             key={stat.id}

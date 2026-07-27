@@ -14,7 +14,7 @@ export default function BannerV2() {
                 bg-no-repeat
             "
         >
-            <div className="mx-auto flex min-h-175 lg:min-h-201.25 max-w-7xl flex-col justify-between">
+            <div className="mx-auto flex lg:min-h-175 max-w-7xl flex-col justify-between">
                 <div className="pt-10">
                     <div className="flex items-end justify-center gap-6 lg:justify-between">
                         <LeftBanner />
