@@ -4,8 +4,16 @@ import SelectBXH from "@/components/selectBXH/SelectBXH"
 import SelectEvent from "@/components/selectEvent/SelectEven"
 import NoiBat from "@/components/selectNoiBat/selectNoiBat"
 import Slider from "@/components/Slider"
+import { getAllEvents } from "@/models/eventModel"
+import { getTopPower } from "@/models/playerModel"
 
-const HomePage = () => {
+const HomePage = async () => {
+
+    const topPower = await getTopPower();
+    const getEvent = await getAllEvents();
+
+
+    console.log("get event : ", getEvent)
     return(
         <>
 
@@ -27,12 +35,14 @@ const HomePage = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 px-2">
                         <div className="rounded-2xl border border-blue-800/60 py-8 px-3">
-                            <SelectEvent />
+                            <SelectEvent
+                                dataEvents={getEvent}
+                            />
                         </div>
 
                         <div className="rounded-2xl border border-blue-800/60 py-8 px-3">
 
-                            <SelectBXH />
+                            <SelectBXH listTopPlayerPower={topPower} />
 
                         </div>
 

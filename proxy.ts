@@ -7,7 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || 'goku-super-saiyan-secret-key'
 );
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Lấy refreshToken từ HttpOnly Cookie

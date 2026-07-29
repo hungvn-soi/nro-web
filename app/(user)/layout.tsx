@@ -2,6 +2,7 @@ import AuthModal from "@/components/auth/AuthModal";
 import BannerV2 from "@/components/banner/MainBannerV2";
 import Footer from "@/components/footter/Footer";
 import Header from "@/components/header/Header";
+import ZaloFloatingButton from "@/components/ZaloBox";
 import { AuthProvider } from "@/lib/context/AuthContext";
 
 export default function ShopLayout({
@@ -29,6 +30,7 @@ export default function ShopLayout({
                 {/* Overlay */}
                 <div className="fixed inset-0 -z-10 bg-[#06111f]/70" />
 
+                <ZaloFloatingButton />
                 <Header />
 
             {/* className="relative z-10 flex-1 max-w-7xl mx-auto px-4 w-full */}

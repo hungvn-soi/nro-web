@@ -9,7 +9,8 @@ interface NewsCardProps {
     title: string;
     badge?: string;
     description: string;
-    time: string;
+    startDate: string | null;
+    endDate: string | null;
 }
 
 function NewsCard({
@@ -18,7 +19,8 @@ function NewsCard({
     title,
     badge,
     description,
-    time,
+    startDate,
+    endDate
 }: NewsCardProps) {
     return (
         <Link
@@ -43,7 +45,7 @@ function NewsCard({
             {/* Image */}
             <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-lg">
                 <Image
-                    src={image}
+                    src={image || "/assets/Card/card1.webp"}
                     alt={title}
                     fill
                     sizes="160px"
@@ -77,7 +79,7 @@ function NewsCard({
                         className="h-4 w-4 shrink-0"
                     />
 
-                    <time>{time}</time>
+                    <time>{startDate} - {endDate}</time>
                 </div>
             </div>
         </Link>

@@ -9,6 +9,7 @@ const BoxCard = ({ img, title, subTitle }: IProp) => {
         <div
             className="
                 w-full
+                min-h-81
                 overflow-hidden
                 rounded-2xl
                 border-2 border-[#0f3981]
@@ -22,11 +23,11 @@ const BoxCard = ({ img, title, subTitle }: IProp) => {
                 src={img}
                 alt={title}
                 className="
-                w-full
-                h-48
-                sm:h-56
-                lg:h-72
-                object-cover
+                    w-full
+                    h-40
+                    sm:h-45
+                    lg:h-50
+                    object-cover
                 "
             />
 

@@ -1,14 +1,22 @@
+import { IPlayer } from "@/types/player";
 import SectionTitle2 from "../SectionTitle2"
 import TabsForm from "../TabForm"
 import TopPower from "./TopPower";
 
-const tabs = [
-    { id: "luchien", label: "Lực chiến", content: <TopPower /> },
-    { id: "capdo", label: "Cấp độ", content: <p className="text-white">⭐ Đang phát triển.</p> },
-    { id: "nap", label: "Nạp", content: <p className = "text-white">⭐ Đang phát triển.</p> },
-];
 
-const SelectBXH = () => {
+interface IProp {
+    listTopPlayerPower: IPlayer[]
+}
+
+
+const SelectBXH = ({ listTopPlayerPower }:IProp) => {
+
+    const tabs = [
+        { id: "luchien", label: "Lực chiến", content: <TopPower dataPlayerTopPower={listTopPlayerPower} /> },
+        { id: "capdo", label: "Cấp độ", content: <p className="text-white">⭐ Đang phát triển.</p> },
+        { id: "nap", label: "Nạp", content: <p className="text-white">⭐ Đang phát triển.</p> },
+    ];
+
     return (
         <>
             <SectionTitle2

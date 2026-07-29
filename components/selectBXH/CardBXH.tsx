@@ -1,10 +1,11 @@
+import { formatNumber } from "@/utils/format";
 import { Trophy } from "lucide-react";
 
 interface IPops {
     img: string
     useName: string
     serverName: string
-    dame: string
+    dame: number
     rank: number
 }
 
@@ -35,14 +36,14 @@ const CardBXH = ({ img, useName, serverName, dame, rank }: IPops) => {
                         alt={`Avatar ${useName}`}
                         className="md:w-15 md:h-15 w-10 h-10 rounded-full"
                     />
-                    <div className="flex flex-col items-center justify-center">
+                    <div className="flex flex-col items-start justify-center">
                         <h1>{useName}</h1>
                         <p className="hidden lg:block">{serverName}</p>
                     </div>
                 </div>
 
                 <div className="text-amber-300 font-bold border border-gray-700 rounded-2xl p-3">
-                    {dame}
+                    {formatNumber(dame)}
                 </div>
             </div>
         </div>

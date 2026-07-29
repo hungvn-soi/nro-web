@@ -9,7 +9,7 @@ export default function RightBanner() {
                 width={532}
                 height={760} // chỉnh theo kích thước thực của ảnh
                 priority
-                className="h-auto w-full max-w-[532px]"
+                className="h-auto w-full"
             />
         </div>
     );

@@ -1,3 +1,5 @@
+"use client"
+import { IPlayer } from "@/types/player"
 import CardBXH from "./CardBXH"
 
 const data = [
@@ -40,18 +42,22 @@ const data = [
     },
 ]
 
-const TopPower = () => {
+interface IProp{
+    dataPlayerTopPower: IPlayer[]
+}
+
+const TopPower = ({ dataPlayerTopPower }: IProp) => {
     return (
         <div>
             {
-                data.map( (item, index ) => (
+                dataPlayerTopPower.map( (item, index ) => (
                     <CardBXH
-                        key={index}
+                        key={item.id}
                         rank={index+1}
-                        img={item.img}
-                        useName={item.useName}
-                        serverName={item.serverName}
-                        dame={item.dame}
+                        img={"/assets/Card/card1.webp"}
+                        useName={item.name}
+                        serverName={"Server NRO"}
+                        dame={item.power}
                     />
                 ))
             }

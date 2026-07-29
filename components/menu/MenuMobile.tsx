@@ -94,6 +94,7 @@ const MobileMenu = () => {
                                         alt="Logo"
                                         width={120}
                                         height={55}
+                                        className="w-full"
                                         priority
                                     />
                                 </Link>

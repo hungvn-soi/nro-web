@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Ngọc Rồng GENZ",
-  description: "Cùng nhau làm nên một cộng đồng Ngọc Rồng GENZ vững mạnh",
+  title: "Ngọc Rồng ZENZ",
+  description: "Cùng nhau làm nên một cộng đồng Ngọc Rồng ZENZ vững mạnh",
 };
 
 
@@ -24,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}>
+    <html lang="en" className={`font-sans min-h-screen antialiased`}>
       <body className="min-h-screen flex flex-col">{children}</body>
     </html>
   );
