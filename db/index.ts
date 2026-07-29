@@ -6,10 +6,25 @@ const dbUrl =
     process.env.DATABASE_URL ??
     "mysql://root:@localhost:3306/nro_game";
 
-// Pool kết nối
-const pool = mysql.createPool(dbUrl);
+// Singleton Pool (tránh tạo nhiều pool khi Next.js Hot Reload)
+const globalForDb = globalThis as {
+    mysqlPool?: mysql.Pool;
+};
 
-// Test kết nối
+const pool =
+    globalForDb.mysqlPool ??
+    mysql.createPool({
+        uri: dbUrl,
+        connectionLimit: 10,
+        waitForConnections: true,
+        queueLimit: 0,
+    });
+
+if (process.env.NODE_ENV !== "production") {
+    globalForDb.mysqlPool = pool;
+}
+
+// Test kết nối (chỉ chạy 1 lần khi dev)
 async function testConnection() {
     try {
         const connection = await pool.getConnection();
@@ -18,12 +33,14 @@ async function testConnection() {
 
         connection.release();
     } catch (error) {
-        console.error("🔴 [DATABASE] Kết nối thất bại!");
+        console.error("🔴 [DATABASE] Kết nối MySQL thất bại!");
         console.error(error);
     }
 }
 
-testConnection();
+if (process.env.NODE_ENV === "development") {
+    testConnection();
+}
 
 export const db = drizzle(pool, {
     schema,
