@@ -1,8 +1,13 @@
+import { IServerStatus } from "@/types/serverStatus";
 import ServerStatsBar from "../ServerStatsBar";
 import LeftBanner from "./LeftBanner";
 import RightBanner from "./RightBanner";
 
-export default function BannerV2() {
+interface IBannerProps{
+    serverInfo: IServerStatus | null
+}
+
+export default function BannerV2({ serverInfo }: IBannerProps) {
     return (
         <section
             className="
@@ -25,7 +30,9 @@ export default function BannerV2() {
                     </div>
                 </div>
 
-                <ServerStatsBar />
+                <ServerStatsBar
+                    severInfo={serverInfo}
+                />
             </div>
         </section>
     );

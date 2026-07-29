@@ -16,7 +16,8 @@ export const serverStatus = mysqlTable("server_status", {
         .default(0)
         .notNull(),
 
-    updatedAt: timestamp("updated_at"),
+    updatedAt: timestamp("updated_at")
+        .notNull(),
 });
 
 export type ServerStatusSelect = typeof serverStatus.$inferSelect;

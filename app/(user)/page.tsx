@@ -7,21 +7,29 @@ import Slider from "@/components/Slider";
 
 import { getAllEvents } from "@/models/eventModel";
 import { getTopPower } from "@/models/playerModel";
+import { getServerStatus } from "@/models/serverStatus";
 
 export default async function HomePage() {
-    console.time("HomePage");
 
-    const [topPower, events] = await Promise.all([
+    const [topPower, events, serverInfo] = await Promise.all([
         getTopPower(),
         getAllEvents(),
+        getServerStatus(),
     ]);
 
-    console.timeEnd("HomePage");
+    const dataInfoDefautch = {
+        id: 1,
+        online: 1,
+        playersOnline: 103,
+        updatedAt: 17/10/1996,
+    }
 
     return (
         <>
             <div className="-mt-15">
-                <BannerV2 />
+                <BannerV2
+                    serverInfo={serverInfo}
+                />
             </div>
 
             <main className="max-w-7xl mx-auto">
