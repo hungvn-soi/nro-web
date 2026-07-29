@@ -5,4 +5,7 @@ export interface IPlayer {
     head: number;
     gender: number;
     power: number;
+
+    level: number
+    levelName: string
 }

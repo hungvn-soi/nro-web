@@ -13,16 +13,6 @@ interface IPops{
 const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
 
     const DataTabs: IFormTab[] = [
-        {
-            id: "thecao",
-            label: "Thẻ Cào",
-            content:
-                <CardRecharge
-                    dataBangGia={bangGia}
-                    selectGiaGoi={selectGiaGoi}
-                />
-
-        },
         { 
             id: "nganhang", 
             label: "Chuyển Khoản", 
@@ -34,7 +24,17 @@ const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
                     transferContent="test thanh toán chuyển khoản"
                 
                 /> 
-        }
+        },
+        {
+            id: "thecao",
+            label: "Thẻ Cào",
+            content:
+                <CardRecharge
+                    dataBangGia={bangGia}
+                    selectGiaGoi={selectGiaGoi}
+                />
+
+        },
     ]
 
 

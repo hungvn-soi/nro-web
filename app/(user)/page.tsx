@@ -3,6 +3,7 @@ import SectionTitle from "@/components/SectionTitle";
 import SelectBXH from "@/components/selectBXH/SelectBXH";
 import SelectEvent from "@/components/selectEvent/SelectEven";
 import NoiBat from "@/components/selectNoiBat/selectNoiBat";
+import { ITopLevelProps } from "@/components/ServerStatsBar";
 import Slider from "@/components/Slider";
 
 import { getAllEvents } from "@/models/eventModel";
@@ -17,11 +18,9 @@ export default async function HomePage() {
         getServerStatus(),
     ]);
 
-    const dataInfoDefautch = {
-        id: 1,
-        online: 1,
-        playersOnline: 103,
-        updatedAt: 17/10/1996,
+    const topLevel ={
+        level: topPower[0].level,
+        nameLevel: topPower[0].levelName
     }
 
     return (
@@ -29,6 +28,7 @@ export default async function HomePage() {
             <div className="-mt-15">
                 <BannerV2
                     serverInfo={serverInfo}
+                    topLevel={topLevel}
                 />
             </div>
 

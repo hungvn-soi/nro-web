@@ -51,13 +51,19 @@ const STATS = [
     },
 ]
 
-
-interface IServerBarProps{
-    severInfo: IServerStatus | null
+export interface ITopLevelProps {
+    level: number
+    nameLevel: string
 }
 
 
-function ServerStatsBar({ severInfo }: IServerBarProps) {
+interface IServerBarProps{
+    severInfo: IServerStatus | null
+    topLevel: ITopLevelProps | null
+}
+
+
+function ServerStatsBar({ topLevel, severInfo }: IServerBarProps) {
     const [dataStart, setDataStart] = useState<IStartPops[]>(STATS)
 
     if (!severInfo) {
@@ -75,7 +81,7 @@ function ServerStatsBar({ severInfo }: IServerBarProps) {
                 : item.id === "server"
                     ? (severInfo.online ? "Online" : "Offline")
                 : item.id === "level"
-                    ? "300"
+                            ? (topLevel?.level ? topLevel.level.toLocaleString() : "20") 
                         : item.id === "event" ? "X2 EXP" : ""
         }))
 

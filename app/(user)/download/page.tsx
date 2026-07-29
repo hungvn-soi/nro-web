@@ -63,7 +63,7 @@ const DowloadGame = () => {
             </div>
 
             <div className="mt-10 max-w-7xl mx-auto">
-                <div className="grid gap-3 grid-cols-1 lg:px-0 px-2 ">
+                <div className="grid gap-3 lg:grid-cols-[60%_40%] grid-cols-1 lg:px-0 px-2 ">
                     <div className="w-full">
                         <DownloadFrame title="DOWLOAD NGAY ">
                             {

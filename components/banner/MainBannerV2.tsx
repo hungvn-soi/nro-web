@@ -1,13 +1,18 @@
 import { IServerStatus } from "@/types/serverStatus";
-import ServerStatsBar from "../ServerStatsBar";
+import ServerStatsBar, { ITopLevelProps } from "../ServerStatsBar";
 import LeftBanner from "./LeftBanner";
 import RightBanner from "./RightBanner";
 
+
+
+
+
 interface IBannerProps{
     serverInfo: IServerStatus | null
+    topLevel: ITopLevelProps | null
 }
 
-export default function BannerV2({ serverInfo }: IBannerProps) {
+export default function BannerV2({ serverInfo, topLevel }: IBannerProps) {
     return (
         <section
             className="
@@ -32,6 +37,7 @@ export default function BannerV2({ serverInfo }: IBannerProps) {
 
                 <ServerStatsBar
                     severInfo={serverInfo}
+                    topLevel={topLevel}
                 />
             </div>
         </section>
