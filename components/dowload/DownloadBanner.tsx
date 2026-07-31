@@ -6,35 +6,44 @@ import {
 } from "react-icons/fa";
 import { TbPackage } from "react-icons/tb";
 
+const buttons = [
+    {
+        id:"pc",
+        icon: <FaWindows className="w-[22px] h-[22px]" />,
+        label: "WINDOWS",
+        link: "https://drive.google.com/file/d/1wDiUU9Un-KXT2kf1GTCffDM3rYeQ4tLh/view?usp=sharing"
+    },
+    {
+        id: "android",
+        icon: <FaAndroid size={22} className="text-lime-400" />,
+        label: "ANDROID",
+        link: "https://drive.google.com/file/d/1RwgLJ_jwa7TuYRWf-xka-OAwKGzN92FP/view?usp=sharing"
+
+    },
+    {
+        id: "apk",
+        icon: <TbPackage size={22} className="text-yellow-400" />,
+        label: "APK",
+        link: "https://drive.google.com/file/d/1RwgLJ_jwa7TuYRWf-xka-OAwKGzN92FP/view?usp=sharing"
+
+    },
+    {
+        id:"ios",
+        icon: <FaApple size={22} />,
+        label: "IOS",
+        link: "Chúng tôi đang phát triển cho bản IOS..."
+
+    },
+];
+
 const DownloadBanner = () => {
-    const buttons = [
-        {
-            icon: <FaWindows className="w-[22px] h-[22px]" />,
-            label: "WINDOWS",
-            link:"link dowload windows"
-        },
-        {
-            icon: <FaAndroid size={22} className="text-lime-400" />,
-            label: "ANDROID",
-            link: "link dowload android"
 
-        },
-        {
-            icon: <TbPackage size={22} className="text-yellow-400" />,
-            label: "APK",
-            link: "link dowload APK"
 
-        },
-        {
-            icon: <FaApple size={22} />,
-            label: "IOS",
-            link: "link dowload IOS"
+    const handleClickDowLoad = (id:string, link:string) =>{
+        if(id === "ios")
+            return alert("IOS chungs tôi đang phát triển")
 
-        },
-    ];
-
-    const handleClickDowLoad = (link:string) =>{
-        alert(` redirect: ${link}`)
+        window.open(link, "_blank", "noopener,noreferrer");
     }
 
     return (
@@ -94,6 +103,7 @@ const DownloadBanner = () => {
                         <button
                             key={item.label}
                             className="
+                                cursor-pointer
                                 group
                                 flex
                                 items-center
@@ -114,7 +124,7 @@ const DownloadBanner = () => {
                                 hover:bg-[#16355f]
                                 hover:shadow-[0_0_20px_rgba(255,210,0,.35)]
                             "
-                            onClick={()=> handleClickDowLoad(item.link)}
+                            onClick={()=> handleClickDowLoad(item.id, item.link)}
                         >
                             {item.icon}
 
