@@ -4,7 +4,7 @@ import * as schema from "./schema";
 
 const dbUrl =
     process.env.DATABASE_URL ??
-    "mysql://root:@localhost:3306/nro_game";
+    "mysql://root:@localhost:3306/nro";
 
 // Singleton Pool (tránh tạo nhiều pool khi Next.js Hot Reload)
 const globalForDb = globalThis as {
