@@ -50,7 +50,7 @@ export default async function HomePage() {
                         </div>
 
                         <div className="rounded-2xl border border-blue-800/60 py-8 px-3">
-                            <SelectBXH listTopPlayerPower={topPower} />
+                            <SelectBXH />
                         </div>
                     </div>
                 </section>

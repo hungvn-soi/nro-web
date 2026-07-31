@@ -9,27 +9,23 @@ import { useCallback } from "react";
 const data = [
     {
         title: "Bản đồ rộng lớn",
-        image: "/assets/Card/card1.webp",
+        image: "/assets/imgInGame/ingame1.webp",
     },
     {
         title: "Chiến đấu đỉnh cao",
-        image: "/assets/Card/card1.webp",
+        image: "/assets/imgInGame/inGame2.webp",
     },
     {
         title: "Boss khủng",
-        image: "/assets/Card/card1.webp",
+        image: "/assets/imgInGame/inGame3.webp",
     },
     {
         title: "Thời trang đa dạng",
-        image: "/assets/Card/card1.webp",
+        image: "/assets/imgInGame/ThoiTrang.webp",
     },
     {
-        title: "Thời trang đa dạng",
-        image: "/assets/Card/card1.webp",
-    },
-    {
-        title: "Thời trang đa dạng",
-        image: "/assets/Card/card1.webp",
+        title: "Pet Thời thượng",
+        image: "/assets/imgInGame/Pet.webp",
     },
 ];
 

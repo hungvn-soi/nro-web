@@ -1,56 +1,41 @@
 "use client"
 import { IPlayer } from "@/types/player"
 import CardBXH from "./CardBXH"
+import { useEffect, useState } from "react"
+import LoadingOverlay from "../LoadingOverlay"
 
-const data = [
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-        
-    },
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật 2",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-    },
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật 3",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-    },
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật 4",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-    },
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật 5",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-    },
-    {
-        img: "/assets/Card/card1.webp",
-        useName: "Tên nhân vật 6",
-        serverName: "Server NRO",
-        dame: "500.000.000",
-    },
-]
+const TopPower = () => {
 
-interface IProp{
-    dataPlayerTopPower: IPlayer[]
-}
+    const[topPower, setTopPower] = useState<IPlayer[] | null>(null)
+    const [isloading, setisLoading] = useState<boolean>(false)
 
-const TopPower = ({ dataPlayerTopPower }: IProp) => {
+    useEffect(() => {
+            const loadDataTopPower = async () => {
+                try {
+                    setisLoading(true)
+                    const res = await fetch("/api/top-server/power", {
+                        cache: "no-store",
+                    });
+    
+                    if (!res.ok) return;
+    
+                    setTopPower(await res.json());
+                } catch (err) {
+                    console.error(err);
+                } finally { setisLoading(false) }
+            };
+
+        loadDataTopPower()
+
+    }, []);
+
     return (
-        <div>
+        <div className="relative w-full h-full">
+            <LoadingOverlay
+                show={isloading}
+            />
             {
-                dataPlayerTopPower.map( (item, index ) => (
+                topPower ? topPower.map( (item, index ) => (
                     <CardBXH
                         key={item.id}
                         rank={index+1}
@@ -59,7 +44,7 @@ const TopPower = ({ dataPlayerTopPower }: IProp) => {
                         serverName={"Server NRO"}
                         dame={item.power}
                     />
-                ))
+                )) : <div>Loading</div>
             }
         </div>
     )

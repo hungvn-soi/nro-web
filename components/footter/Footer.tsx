@@ -68,10 +68,10 @@ export default function Footer() {
 
                         <ul className="space-y-3 text-gray-400">
                             <FooterLink href="/guide">Hướng dẫn</FooterLink>
-                            <FooterLink href="/faq">FAQ</FooterLink>
-                            <FooterLink href="/rules">Quy định</FooterLink>
-                            <FooterLink href="/contact">Liên hệ</FooterLink>
-                            <FooterLink href="/report">Báo lỗi</FooterLink>
+                            <FooterLink href="/">FAQ</FooterLink>
+                            <FooterLink href="/">Quy định</FooterLink>
+                            <FooterLink href="/">Liên hệ</FooterLink>
+                            <FooterLink href="/">Báo lỗi</FooterLink>
                         </ul>
                     </div>
 
