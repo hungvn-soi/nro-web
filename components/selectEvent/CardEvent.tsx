@@ -43,13 +43,13 @@ function NewsCard({
             "
         >
             {/* Image */}
-            <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-lg">
+            <div className="relative h-24 w-40 shrink-0 overflow-hidden">
                 <Image
-                    src={image || "/assets/Card/card1.webp"}
+                    src={image || "/assets/evenMau.webp"}
                     alt={title}
                     fill
-                    sizes="160px"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="140px"
+                    className="object-none transition-transform duration-300 group-hover:scale-105 rounded-4xl"
                 />
             </div>
 

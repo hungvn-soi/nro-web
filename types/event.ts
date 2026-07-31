@@ -1,7 +1,7 @@
 export interface IEvent{
     id: number
     name: string
-    state: boolean
+    active: boolean
     image: string | null;
     badge: "NONE" | "NEW" | "HOT";
     description:string | null

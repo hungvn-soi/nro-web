@@ -31,9 +31,7 @@ const TopPower = () => {
 
     return (
         <div className="relative w-full h-full">
-            <LoadingOverlay
-                show={isloading}
-            />
+            
             {
                 topPower ? topPower.map( (item, index ) => (
                     <CardBXH
@@ -44,7 +42,9 @@ const TopPower = () => {
                         serverName={"Server NRO"}
                         dame={item.power}
                     />
-                )) : <div>Loading</div>
+                )) : <LoadingOverlay
+                    show={isloading}
+                />
             }
         </div>
     )
