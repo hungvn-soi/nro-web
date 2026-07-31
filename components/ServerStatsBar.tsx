@@ -1,5 +1,6 @@
-"use client"
-import { memo, useEffect, useState } from "react";
+"use client";
+
+import { memo, useEffect, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Gift, Server, Star, Users } from "lucide-react";
 import { IServerStatus } from "@/types/serverStatus";
@@ -12,12 +13,12 @@ interface StatItemProps {
     showBorder: boolean;
 }
 
-interface IStartPops{
-    id: string
-    icon: LucideIcon,
-    labelTop: string,
-    value: string
-    labelBottom: string
+interface IStat {
+    id: string;
+    icon: LucideIcon;
+    labelTop: string;
+    value: string;
+    labelBottom: string;
 }
 
 const STATS = [
@@ -25,70 +26,98 @@ const STATS = [
         id: "online",
         icon: Users,
         labelTop: "ONLINE",
-        value: "Zeno đang kiểm tra",
+        value: "",
         labelBottom: "NGƯỜI",
     },
     {
         id: "server",
         icon: Server,
         labelTop: "SERVER",
-        value: "Zeno đang kiểm tra",
+        value: "",
         labelBottom: "MÁY CHỦ",
     },
     {
         id: "level",
         icon: Star,
         labelTop: "LEVEL MAX",
-        value: "Zeno đang kiểm tra",
+        value: "",
         labelBottom: "CẤP",
     },
     {
         id: "event",
         icon: Gift,
         labelTop: "SỰ KIỆN",
-        value: "Zeno đang kiểm tra",
+        value: "",
         labelBottom: "CUỐI TUẦN",
     },
-]
+] as const;
 
 export interface ITopLevelProps {
-    level: number
-    nameLevel: string
+    level: number;
+    nameLevel: string;
 }
 
-
-interface IServerBarProps{
-    severInfo: IServerStatus | null
-    topLevel: ITopLevelProps | null
+interface IServerBarProps {
+    severInfo: IServerStatus | null;
+    topLevel: ITopLevelProps | null;
 }
 
+function ServerStatsBar({
+    severInfo,
+    topLevel,
+}: IServerBarProps) {
+    const [server, setServer] = useState(severInfo);
 
-function ServerStatsBar({ topLevel, severInfo }: IServerBarProps) {
-    const [dataStart, setDataStart] = useState<IStartPops[]>(STATS)
+    useEffect(() => {
+        const loadServerStatus = async () => {
+            console.log("call api lấy status")
+            try {
+                const res = await fetch("/api/server-status", {
+                    cache: "no-store",
+                });
 
-    if (!severInfo) {
-        return <div>Loading...</div>;
-    }
+                if (!res.ok) return;
 
-    useEffect(()=> {
-        if(!severInfo) return
+                setServer(await res.json());
+            } catch (err) {
+                console.error(err);
+            }
+        };
 
-        const stats = STATS.map((item) => ({
+        let intervalId: ReturnType<typeof setInterval>;
+
+        // Sau 6 giây gọi lần đầu
+        const timeoutId = setTimeout(() => {
+            loadServerStatus();
+
+            // Sau đó cứ 3 phút gọi tiếp
+            intervalId = setInterval(loadServerStatus, 2 * 60 * 1000);
+        }, 3000);
+
+        return () => {
+            clearTimeout(timeoutId);
+
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, []);
+
+    const stats: IStat[] = useMemo(() => {
+        return STATS.map((item) => ({
             ...item,
             value:
                 item.id === "online"
-                    ? (severInfo.playersOnline.toLocaleString())
-                : item.id === "server"
-                    ? (severInfo.online ? "Online" : "Offline")
-                : item.id === "level"
-                            ? (topLevel?.level ? topLevel.level.toLocaleString() : "20") 
-                        : item.id === "event" ? "X2 EXP" : ""
-        }))
-
-        setDataStart(stats)
-
-    },[severInfo])
-
+                    ? server?.playersOnline.toLocaleString() ?? "0"
+                    : item.id === "server"
+                        ? server?.online
+                            ? "Online"
+                            : "Offline"
+                        : item.id === "level"
+                            ? topLevel?.level.toLocaleString() ?? "20"
+                            : "X2 EXP",
+        }));
+    }, [server, topLevel]);
 
     return (
         <section className="mx-auto w-full max-w-5xl p-4">
@@ -101,29 +130,24 @@ function ServerStatsBar({ topLevel, severInfo }: IServerBarProps) {
                     shadow-[0_0_20px_rgba(6,182,212,.15)]
                 "
             >
-                {/* Top line */}
                 <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-cyan-400/50 to-transparent" />
 
-                {/* Stats */}
                 <div className="grid grid-cols-2 divide-y divide-cyan-500/20 sm:grid-cols-2 md:grid-cols-4 md:divide-y-0">
-                    {
-                        dataStart && dataStart.map((stat, index) => (
-                            <StatItem
-                                key={stat.id}
-                                icon={stat.icon}
-                                labelTop={stat.labelTop}
-                                value={stat.value}
-                                labelBottom={stat.labelBottom}
-                                showBorder={index !== STATS.length - 1}
-                            />
-                        ))
-                    }
+                    {stats.map((stat, index) => (
+                        <StatItem
+                            key={stat.id}
+                            icon={stat.icon}
+                            labelTop={stat.labelTop}
+                            value={stat.value}
+                            labelBottom={stat.labelBottom}
+                            showBorder={index !== stats.length - 1}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
     );
 }
-
 
 const StatItem = memo(function StatItem({
     icon: Icon,
@@ -140,7 +164,6 @@ const StatItem = memo(function StatItem({
                 ${showBorder ? "md:border-r md:border-cyan-500/20" : ""}
             `}
         >
-            {/* Icon */}
             <div
                 className="
                     relative flex h-14 w-14 shrink-0
@@ -156,14 +179,12 @@ const StatItem = memo(function StatItem({
             >
                 <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-950/60">
                     <Icon
-                        aria-hidden
                         className={`h-6 w-6 text-white ${Icon === Star ? "fill-white" : ""
                             }`}
                     />
                 </div>
             </div>
 
-            {/* Text */}
             <div className="flex flex-col text-left">
                 <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300/80">
                     {labelTop}
