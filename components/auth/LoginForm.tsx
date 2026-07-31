@@ -55,9 +55,6 @@ export default function LoginForm() {
                 />
             </div>
 
-            {/* <div className="text-xs text-right text-amber-300/70 hover:underline cursor-pointer">
-                Quên mật khẩu?
-            </div> */}
 
             <button
                 type="submit"
@@ -67,9 +64,6 @@ export default function LoginForm() {
                 {loading ? 'Đợi Zeno trả lời' : 'ĐĂNG NHẬP'}
             </button>
 
-            {/* <div className="text-center text-xs text-gray-400 mt-2">
-                Gợi ý test: <span className="text-amber-300 font-mono">admin</span> / <span className="text-amber-300 font-mono">123123</span>
-            </div> */}
         </form>
     );
 }

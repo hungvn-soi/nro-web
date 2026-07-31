@@ -70,7 +70,6 @@ function ServerStatsBar({
 
     useEffect(() => {
         const loadServerStatus = async () => {
-            console.log("call api lấy status")
             try {
                 const res = await fetch("/api/server-status", {
                     cache: "no-store",

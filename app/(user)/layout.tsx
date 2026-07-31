@@ -5,7 +5,7 @@ import Header from "@/components/header/Header";
 import ZaloFloatingButton from "@/components/ZaloBox";
 import { AuthProvider } from "@/lib/context/AuthContext";
 
-export default function ShopLayout({
+export default function AdminPage({
     children,
 }: {
     children: React.ReactNode;

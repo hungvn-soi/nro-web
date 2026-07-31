@@ -5,10 +5,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 type AuthMode = 'login' | 'register' | null;
 
 interface User {
-    id: string;
-    username: string;
-    name: string;
-    role: string;
+    id:number,
+    username: string,
+    email: string,
+    cash: number,
+    isAdmin: boolean,
 }
 
 interface AuthContextType {

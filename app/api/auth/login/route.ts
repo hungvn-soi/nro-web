@@ -48,7 +48,7 @@ export async function POST(request: Request) {
             username: user.username,
             email: user.email,
             cash: user.cash,
-            isAdmin: user.isAdmin,
+            isAdmin: user.isAdmin === 0 ? false : true,
         };
 
         // 6. Tạo Token JWT

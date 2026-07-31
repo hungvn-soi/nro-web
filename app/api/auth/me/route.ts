@@ -2,27 +2,28 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'goku-super-saiyan-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'ngoc_rong_zenz_super_secret_key_2026_@123';
 
 export async function GET() {
     try {
         const cookieStore = await cookies();
-        const refreshToken = cookieStore.get('refreshToken')?.value;
+        const token = cookieStore.get('token')?.value;
 
-        if (!refreshToken) {
+        if (!token) {
             return NextResponse.json({ authenticated: false }, { status: 401 });
         }
 
         // Verify token từ Cookie
-        const decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
+        const decoded = jwt.verify(token, JWT_SECRET) as any;
 
         return NextResponse.json({
             authenticated: true,
             user: {
                 id: decoded.id,
                 username: decoded.username,
-                name: decoded.name,
-                role: decoded.role,
+                email: decoded.email,
+                cash: decoded.cash,
+                isAdmin: decoded.isAdmin,
             },
         });
     } catch (error) {

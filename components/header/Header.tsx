@@ -1,18 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import LoginBTN from "../button/Login";
 import RegisterBTN from "../button/Register";
 import { useAuth } from "@/lib/context/AuthContext";
 import MobileMenu from "../menu/MenuMobile";
 import MenuPC from "../menu/MenuPc";
-import { User } from "lucide-react"
 import ProfileMenu from "../profile/ProfileMenu";
 
 
 const Header = () => {
-    const pathname = usePathname();
     const { user, openAuthModal, logout } = useAuth();
 
     const handleLogin =()=> {
