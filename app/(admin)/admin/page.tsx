@@ -1,23 +1,28 @@
-"use client"
-import { useAuth } from "@/lib/context/AuthContext";
+"use client";
+
 import { useEffect } from "react";
-
-
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const AdminPage = () => {
-const { user } = useAuth();
-    if(!user || !user.isAdmin){
-        alert("Bạn ko phải admin or chưa login")
+    const { user } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!user || !user.isAdmin) {
+            router.replace("/");
+        }
+    }, [user, router]);
+
+    if (!user || !user.isAdmin) {
+        return null; // hoặc Loading...
     }
-    
-    useEffect (()=> {
 
-    })
+    return (
+        <div>
+            Welcome admin: {user.username}
+        </div>
+    );
+};
 
-
-    return(
-        <div>Admin page</div>
-    )
-}
-
-export default AdminPage
+export default AdminPage;
