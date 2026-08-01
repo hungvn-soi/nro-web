@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { findUserByUsername } from '@/models/userModel';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'nro_zenz_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'ngoc_rong_zenz_super_secret_key_2026_@123';
 
 export async function POST(request: Request) {
     try {
