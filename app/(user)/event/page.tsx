@@ -1,22 +1,22 @@
-import { Construction } from "lucide-react"
+import TitleBannerForm from "@/components/TilebannerForm"
 
 const SuKien = () => {
     return (
-        <div className="flex min-h-[500px] flex-col items-center justify-center rounded-2xl border border-blue-900/50 bg-[#0b1324]/80 p-10 text-center">
-            <Construction className="mb-4 h-14 w-14 text-yellow-400" />
+        <div className="w-full relative left-1/2 -translate-x-1/2 
+            bg-[url('/assets/event/event-mobi.webp')]
+            md:bg-[url('/assets/event/event-tablet.webp')]
+            xl:bg-[url('/assets/event/event.webp')]
+            bg-center bg-cover bg-no-repeat">
+            <div className="md:min-h-125 min-h-60 flex  lg:justify-around justify-center items-center">
 
-            <h1 className="text-3xl font-bold text-white">
-                Sự kiện 
-            </h1>
+                <TitleBannerForm
+                    classBox="flex flex-col justify-between items-center"
+                    title1="Sự Kiện"
+                    ClassTitle1="!text-[140px], text-center text-white font-bold drop-shadow-lg"
+                    title2="Nơi có những thứ hấp dẫn"
+                    subTitle="Cập nhật những sự kiện hấp dẫn và phần thưởng đặc biệt đang diễn ra trong Ngọc Rồng Zenz"
+                />
 
-            <p className="mt-3 max-w-md text-gray-300">
-                Trang này đang được phát triển.
-                <br />
-                Vui lòng quay lại sau để trải nghiệm những tính năng mới.
-            </p>
-
-            <div className="mt-6 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-5 py-2 text-sm font-medium text-yellow-300">
-                🚧 Coming Soon
             </div>
         </div>
     )
