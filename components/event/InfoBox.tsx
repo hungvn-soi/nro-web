@@ -1,6 +1,6 @@
 import { IEvent } from "@/types/event";
-import { Flame } from "lucide-react";
 import EventInfoTable from "./EventInfoTable";
+import { Calendar, Clock } from "lucide-react"
 
 
 interface IInfoBox {
@@ -17,14 +17,17 @@ const InfoBox = ({ data }: IInfoBox) => {
         )
     }
 
-    const rows: { label: string; value: React.ReactNode }[] = [
+    const rows: { label: string; value: React.ReactNode; icon: React.ReactNode }[] = [
         {
             label: "Thời gian bắt đầu",
             value: data.startDate,
+            icon: <Calendar />
         },
         {
             label: "Thời gian kết thúc",
             value: data.endDate,
+            icon: <Calendar />
+
         },
         {
             label: "Trạng thái",
@@ -33,6 +36,8 @@ const InfoBox = ({ data }: IInfoBox) => {
                     {data.active ? "Đang diễn ra" : "Chưa bắt đầu"}
                 </span>
             ),
+            icon: <Clock />
+
         },
     ];
 

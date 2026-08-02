@@ -1,6 +1,9 @@
+import Calender from "lucide-react";
+import Clock from "lucide-react";
 type Row = {
     label: string;
     value: React.ReactNode;
+    icon: React.ReactNode
 };
 
 interface IEventInfoTable {
@@ -20,7 +23,7 @@ export default function EventInfoTable({ data }: IEventInfoTable) {
                         }`}
                 >
                     <div className="flex items-center gap-2 border-r border-white/10 px-5 py-4 text-gray-400">
-                        📅
+                        {row.icon}
                         <span>{row.label}</span>
                     </div>
 
