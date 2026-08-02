@@ -33,7 +33,6 @@ function NewsCard({
                 border
                 border-transparent
                 bg-[#0b1d35]/90
-                p-3
                 transition-all
                 duration-300
                 hover:border-[#ffb347]
@@ -43,13 +42,13 @@ function NewsCard({
             "
         >
             {/* Image */}
-            <div className="relative h-24 w-40 shrink-0 overflow-hidden">
+            <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-xl">
                 <Image
-                    src={image || "/assets/evenMau.webp"}
+                    src={image || "/assets/eventbaner.webp"}
                     alt={title}
                     fill
                     sizes="140px"
-                    className="object-none transition-transform duration-300 group-hover:scale-105 rounded-4xl"
+                    className="object-none transition-transform duration-300 group-hover:scale-105 rounded-xl"
                 />
             </div>
 

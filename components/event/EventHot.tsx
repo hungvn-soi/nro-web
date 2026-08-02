@@ -49,7 +49,7 @@ const EventHot = ({ data }: IEventHot) => {
                 {/**Content Left */}
                 <div className="text-white relative">
                     <img
-                        src="/assets/eventbaner.png"
+                        src="/assets/eventbaner.webp"
                         alt="Event Hot"
                         className="w-full h-full rounded-l-lg"
                     />

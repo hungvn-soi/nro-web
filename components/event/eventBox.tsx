@@ -15,7 +15,7 @@ const EventBox = ({data}: IEventBox) => {
             {/**Image */}
             <div className="w-full h-60 md:h-80 lg:h-50 relative">
                 <img
-                    src={data?.image || "/assets/evenMau.webp"}
+                    src={data?.image || "/assets/eventbaner.webp"}
                     alt="Event"
                     className="w-full h-full object-cover"
                 />
