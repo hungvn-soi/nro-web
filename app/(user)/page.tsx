@@ -3,7 +3,6 @@ import SectionTitle from "@/components/SectionTitle";
 import SelectBXH from "@/components/selectBXH/SelectBXH";
 import SelectEvent from "@/components/selectEvent/SelectEven";
 import NoiBat from "@/components/selectNoiBat/selectNoiBat";
-import { ITopLevelProps } from "@/components/ServerStatsBar";
 import Slider from "@/components/Slider";
 
 import { getAllEvents } from "@/models/eventModel";

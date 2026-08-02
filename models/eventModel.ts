@@ -33,6 +33,19 @@ export async function getHotEvent(): Promise<IEvent | null> {
 }
 
 
+export function GetEventByID(id: number): Promise<IEvent | null> {
+    return db
+        .select()
+        .from(event)
+        .where(eq(event.id, id))
+        .then((items) => {
+            if (items.length === 0) {
+                return null;
+            }
+            return mapEvent(items[0]);
+        });
+}
+
 
 
 
@@ -52,3 +65,6 @@ function mapEvent(item: typeof event.$inferSelect): IEvent {
             : null,
     };
 }
+
+
+

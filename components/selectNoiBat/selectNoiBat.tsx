@@ -80,12 +80,12 @@ export default function NoiBat() {
                         <div
                             key={item.id}
                             className="
-                min-w-0
-                flex-[0_0_50%]
-                px-2
-                sm:flex-[0_0_33.333%]
-                lg:flex-[0_0_20%]
-              "
+                            min-w-0
+                            flex-[0_0_50%]
+                            px-2
+                            sm:flex-[0_0_33.333%]
+                            lg:flex-[0_0_20%]
+                        "
                         >
                             <BoxCard
                                 img={item.img}

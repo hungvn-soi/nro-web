@@ -18,7 +18,7 @@ const SectionTitle2 = ({
 
             <button
                 onClick={onViewAll}
-                className="text-sm font-semibold text-white/80 transition hover:text-white"
+                className="text-sm font-semibold text-white/80 transition hover:text-white cursor-pointer"
             >
                 Xem tất cả
             </button>
