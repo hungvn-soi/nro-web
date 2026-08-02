@@ -20,6 +20,7 @@ const AdminPage = () => {
 
     return (
         <div>
+            test 123123123
             Welcome admin: {user.username}
         </div>
     );
