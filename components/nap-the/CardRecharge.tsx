@@ -47,23 +47,10 @@ const CardRecharge = ({ dataBangGia, selectGiaGoi }: IPops) => {
                     Chọn mệnh giá
                 </label>
 
-                <div className="relative">
-                    <select 
-                        className="h-12 w-full appearance-none rounded-lg border border-[#28415f] bg-[#091b32] px-4 text-white outline-none transition focus:border-yellow-400"
-                        onChange={(e) => setPrice(Number(e.target.value))}
-                        value={price}
-                    >
-                        {dataBangGia.map((option) => (
-                            <option key={option.id} value={option.price}>
-                                {formatNumber(option.price)} VNĐ
-                            </option>
-                        ))}
-                    </select>
-
-                    <ChevronDown
-                        size={18}
-                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    />
+                <div className="flex items-center">
+                    <div className="h-12 w-full rounded-lg border border-[#28415f] bg-[#091b32] px-4 text-white">
+                        {formatNumber(selectGiaGoi)} VNĐ
+                    </div>
                 </div>
             </div>
 

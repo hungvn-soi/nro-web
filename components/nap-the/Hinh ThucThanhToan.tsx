@@ -1,5 +1,3 @@
-"use clien"
-
 import TabsForm, { IFormTab } from "../TabForm"
 import BankTransferCard from "./BankTransferCard"
 import CardRecharge from "./CardRecharge"
@@ -15,14 +13,12 @@ const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
     const DataTabs: IFormTab[] = [
         { 
             id: "nganhang", 
-            label: "Chuyển Khoản", 
+            label: "Chuyển Khoản (QR Code)", 
             content: 
                 <BankTransferCard
-                    accountName="testNRO"
-                    accountNumber="123456789010"
-                    qrCode="/assets/QR CODE/qrcodeTest.png"
-                    transferContent="test thanh toán chuyển khoản"
-                
+                    accountName="TRIEU QUANG HA"
+                    accountNumber="xxxxxxxxxx"
+                    amount={selectGiaGoi}
                 /> 
         },
         {

@@ -17,10 +17,12 @@ interface IPops{
 
 const GoiNap = ({ selectGoi, data }: IPops) => {
     const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+    const [selectGoiUI, setSelectGoiUI] = useState<IDataBangGia | null>(null)
 
-    const handleSlectGoi = (price :number) => {
-        setSelectedPrice(price);
-        selectGoi(price)
+    const handleSlectGoi = (item :IDataBangGia) => {
+        setSelectedPrice(item.price);
+        selectGoi(item.price)
+        setSelectGoiUI(item)
     }
 
     return (
@@ -29,10 +31,9 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
             <div>
                 {
                    data.map((item) => (
-                    
                        <button
                            key={item.id}
-                           onClick={() => handleSlectGoi(item.price)}
+                           onClick={() => handleSlectGoi(item)}
                            className={`
                                 w-full
                                 group
@@ -46,7 +47,7 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                                 transition-all
                                 duration-200
                                 ${selectedPrice === item.price
-                                                        ? `
+                                    ? `
                                         border-yellow-500
                                         bg-linear-to-b
                                         from-[#ffe97a]
@@ -62,8 +63,8 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                                         hover:via-[#ffd42a]
                                         hover:to-[#e7a500]
                                         hover:shadow-[inset_0_1px_0_rgba(255,255,255,.7),0_2px_4px_rgba(0,0,0,.35)]
-                                        `
-                                                    }
+                                    `
+                                }
                             `}
                        >
                            <div className="flex items-center gap-2">
@@ -80,7 +81,7 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                                            : "text-white group-hover:text-[#3b2a00]"
                                        }`}
                                >
-                                   {formatNumber(item.price)} VND
+                                   {formatNumber(item.price)} VNĐ
                                </span>
                            </div>
 
@@ -94,11 +95,22 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                            </span>
                        </button>
                     
-
-
                    ))
                 }
                 
+                <div className="grid grid-cols-2 gap-3 border border-blue-700/50 bg-[#0b2452] mt-3 rounded-md text-white py-2">
+                    <div className="flex flex-col justify-center items-center">
+                        <p className="font-bold">Bạn đang nạp</p>
+                        <div className="font-bold">{formatNumber(selectGoiUI?.price || 0)} VNĐ</div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                        <p className="font-bold">Ngọc thực nhận</p>
+                        <div className="font-bold text-yellow-500">{formatNumber(selectGoiUI?.gem || 0)} Ngọc</div>
+                    </div>
+                </div>
+
+
+
                 <div className="flex items-center gap-3 mt-5">
                     <Sun className="h-6 w-6 text-[#F5C542]" fill="#F5C542" />
 
@@ -114,69 +126,11 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                         Nạp càng nhiều - Ưu đãi càng lớn!
                     </span>
                 </div>
+
+               
             </div>
         </div>
     )
 }
 
 export default GoiNap
-
-
-interface BuyButtonProps {
-    price: number;
-    gem: number;
-    selectGoi: number
-    onClick: (price:number) => void
-}
-
-const ButtonNap = ({ price, gem, onClick } : BuyButtonProps) => {
-    return(
-        <button
-            className={`
-                w-full
-                group
-                flex items-center justify-between
-                h-11 px-4
-                mt-3
-                cursor-pointer
-                rounded-md
-                border border-yellow-600
-                transition-all duration-200
-                bg-transparent
-                hover:bg-linear-to-b
-                hover:from-[#ffe97a]
-                hover:via-[#ffd42a]
-                hover:to-[#e7a500]
-                hover:shadow-[inset_0_1px_0_rgba(255,255,255,.7),0_2px_4px_rgba(0,0,0,.35)]
-                `}
-            
-                onClick={() => onClick(price)}
-        >
-            <div className="flex items-center gap-2">
-                <Gem className="w-5 h-5 text-sky-500" />
-
-                <span
-                    className="
-                    font-bold
-                    text-white
-                    transition-colors
-                    group-hover:text-[#3b2a00]
-                "
-                >
-                    {formatNumber(price)} VND
-                </span>
-            </div>
-
-            <span
-                className="
-                    font-bold
-                    text-yellow-400
-                    transition-colors
-                    group-hover:text-[#3b2a00]
-                    "
-                >
-                {formatNumber(gem)} Ngọc
-            </span>
-        </button>
-    )
-}
