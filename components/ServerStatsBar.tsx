@@ -6,6 +6,7 @@ import { Gift, Server, Star, Users } from "lucide-react";
 import { IServerStatus } from "@/types/serverStatus";
 
 interface StatItemProps {
+    id:string
     icon: LucideIcon;
     labelTop: string;
     value: string | number;
@@ -113,13 +114,13 @@ function ServerStatsBar({
                             ? "Online"
                             : "Offline"
                         : item.id === "level"
-                            ? topLevel?.level.toLocaleString() ?? "20"
+                            ? topLevel?.nameLevel.toLocaleString() ?? "Ngọc Rồng xanh"
                             : "X2 EXP",
         }));
     }, [server, topLevel]);
 
     return (
-        <section className="mx-auto w-full max-w-5xl p-4">
+        <section className="mx-auto w-full max-w-5xl p-2">
             <div
                 className="
                     relative overflow-hidden rounded-xl
@@ -134,6 +135,7 @@ function ServerStatsBar({
                 <div className="grid grid-cols-2 divide-y divide-cyan-500/20 sm:grid-cols-2 md:grid-cols-4 md:divide-y-0">
                     {stats.map((stat, index) => (
                         <StatItem
+                            id={stat.id}
                             key={stat.id}
                             icon={stat.icon}
                             labelTop={stat.labelTop}
@@ -149,6 +151,7 @@ function ServerStatsBar({
 }
 
 const StatItem = memo(function StatItem({
+    id,
     icon: Icon,
     labelTop,
     value,
@@ -158,8 +161,7 @@ const StatItem = memo(function StatItem({
     return (
         <div
             className={`
-                flex items-center justify-center gap-4
-                px-4 py-4
+                flex items-center justify-start gap-4 py-3 ml-2
                 ${showBorder ? "md:border-r md:border-cyan-500/20" : ""}
             `}
         >
@@ -178,18 +180,17 @@ const StatItem = memo(function StatItem({
             >
                 <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-950/60">
                     <Icon
-                        className={`h-6 w-6 text-white ${Icon === Star ? "fill-white" : ""
-                            }`}
+                        className={`h-6 w-6 text-white ${Icon === Star ? "fill-white" : ""}`}
                     />
                 </div>
             </div>
 
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col text-left ">
                 <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300/80">
                     {labelTop}
                 </span>
 
-                <span className="text-2xl font-black tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,.8)]">
+                <span className={`text-[18px] font-black tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,.8)] `}>
                     {value}
                 </span>
 
