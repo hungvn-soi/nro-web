@@ -41,7 +41,8 @@ export default function ContactForm() {
         e.preventDefault();
 
         try {
-            setIsLoading(true)
+            setIsLoading(true);
+
             const res = await fetch("/api/contact/create", {
                 method: "POST",
                 headers: {
@@ -52,14 +53,27 @@ export default function ContactForm() {
 
             const result = await res.json();
 
-            if (result.success) {
-                alert("Cảm ơn bạn đã liên hệ với chúng toi");
-                handleResetFormData()
+            // Nếu API trả lỗi (400, 500,...)
+            if (!res.ok || !result.success) {
+                throw new Error(result.message || "Có lỗi xảy ra.");
             }
 
-        } catch (error) {
+            console.log(result);
 
-        } finally { setIsLoading(false) }
+            alert("Gửi báo lỗi thành công");
+            handleResetFormData();
+
+        } catch (error) {
+            console.error(error);
+
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert("Đã xảy ra lỗi không xác định.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
 
     };
 

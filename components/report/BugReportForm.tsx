@@ -65,27 +65,40 @@ const BugReportForm = () =>  {
             return
         }
 
-       try {
-            setIsLoading(true)
+        try {
+            setIsLoading(true);
+
             const res = await fetch("/api/report/create", {
-               method: "POST",
-               headers: {
-                   "Content-Type": "application/json",
-               },
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(formData),
             });
 
-           const result = await res.json();
+            const result = await res.json();
 
-           console.log("check data send google sheet: ", result)
-           if (result.success) {
-               alert("Gửi báo lỗi thành công");
-               handleResetFormData()
-           }
-        
-       } catch (error) {
-        
-       } finally { setIsLoading(false)}
+            // Nếu API trả lỗi (400, 500,...)
+            if (!res.ok || !result.success) {
+                throw new Error(result.message || "Có lỗi xảy ra.");
+            }
+
+            console.log(result);
+
+            alert("Gửi báo lỗi thành công");
+            handleResetFormData();
+
+        } catch (error) {
+            console.error(error);
+
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert("Đã xảy ra lỗi không xác định.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     //handle reset form
