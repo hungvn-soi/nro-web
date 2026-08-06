@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/context/AuthContext";
+import LoadingOverlay from "../LoadingOverlay";
 
 const formNone = {
     account: "",
@@ -33,15 +34,17 @@ interface IFormDataReport {
 
 const BugReportForm = () =>  {
     const {user} = useAuth()
+    const [isloading, setIsLoading] = useState<boolean> (false)
     const [formData, setFormData] = useState<IFormDataReport>(formNone);
 
     useEffect(() => {
         if(!user) return
         setFormData(prve => ({
+
             ...prve,
             account: user.username
         }))
-    },[user])
+    }, [user])
 
     //handle onchang form
     const handleChange = (
@@ -56,13 +59,33 @@ const BugReportForm = () =>  {
     };
 
     // handle submit form
-    const handleSubmitForm = () => {
+    const handleSubmitForm = async() => {
         if(!formData.account || !formData.character) {
             alert("Tài khoản or Tên nhân vật không được để trống")
             return
         }
 
-        console.log("data ta form submit: ", formData)
+       try {
+            setIsLoading(true)
+            const res = await fetch("/api/report/create", {
+               method: "POST",
+               headers: {
+                   "Content-Type": "application/json",
+               },
+                body: JSON.stringify(formData),
+            });
+
+           const result = await res.json();
+
+           console.log("check data send google sheet: ", result)
+           if (result.success) {
+               alert("Gửi báo lỗi thành công");
+               handleResetFormData()
+           }
+        
+       } catch (error) {
+        
+       } finally { setIsLoading(false)}
     }
 
     //handle reset form
@@ -71,7 +94,12 @@ const BugReportForm = () =>  {
     }
 
     return (
-        <div className="rounded-xl border border-slate-700 bg-[#0b1220]/90 p-6 shadow-lg">
+        <div className="relative rounded-xl border border-slate-700 bg-[#0b1220]/90 p-6 shadow-lg">
+
+            <LoadingOverlay
+                show={isloading}
+            />
+
             {/* Header */}
             <div className="mb-6 flex items-center gap-2">
                 <ClipboardPen className="h-6 w-6 text-blue-500" />
@@ -224,9 +252,9 @@ const BugReportForm = () =>  {
                 <button 
                     className="px-4 py-2 bg-blue-400 rounded-xl flex justify-center items-center hover:bg-blue-600 cursor-pointer text-white gap-2"
                     onClick={() => handleSubmitForm()}    
-                >
+                >   
                     <Send />
-                    Gửi báo lỗi
+                        Gửi báo lỗi
                 </button>
             </div>
         </div>
