@@ -17,6 +17,7 @@ import {
     Trophy,
     CircleHelp,
     Mail,
+    Flag,
 } from "lucide-react";
 
 const menus = [
@@ -24,7 +25,8 @@ const menus = [
     { name: "Tải game", href: "/download", icon: Download },
     { name: "Nạp thẻ", href: "/nap-the", icon: Gem },
     { name: "Sự kiện", href: "/event", icon: Gift },
-    { name: "BXH", href: "/ranking", icon: Trophy },
+    // { name: "BXH", href: "/ranking", icon: Trophy },
+    { name: "Báo lỗi", href: "/report", icon: Flag },
     { name: "Hướng dẫn", href: "/guide", icon: CircleHelp },
     { name: "Liên hệ", href: "/contact", icon: Mail },
 ];
