@@ -85,28 +85,27 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                                </span>
                            </div>
 
-                           <span
+                           {/* <span
                                className={`font-bold transition-colors ${selectedPrice === item.price
                                        ? "text-[#3b2a00]"
                                        : "text-yellow-400 group-hover:text-[#3b2a00]"
                                    }`}
                            >
                                {formatNumber(item.gem)} Ngọc
-                           </span>
+                           </span> */}
                        </button>
                     
                    ))
                 }
                 
                 <div className="grid grid-cols-2 gap-3 border border-blue-700/50 bg-[#0b2452] mt-3 rounded-md text-white py-2">
-                    <div className="flex flex-col justify-center items-center">
-                        <p className="font-bold">Bạn đang nạp</p>
-                        <div className="font-bold">{formatNumber(selectGoiUI?.price || 0)} VNĐ</div>
+                    <div className="flex gap-2 justify-center items-center">
+                        <Gem
+                            className={"w-5 h-5 text-sky-500"}
+                        />
+                        <p className="font-bold uppercase">Bạn đang nạp : </p>
                     </div>
-                    <div className="flex flex-col justify-center items-center">
-                        <p className="font-bold">Ngọc thực nhận</p>
-                        <div className="font-bold text-yellow-500">{formatNumber(selectGoiUI?.gem || 0)} Ngọc</div>
-                    </div>
+                    <div className="font-bold text-[20px] text-yellow-500">{formatNumber(selectGoiUI?.price || 0)} VNĐ</div>
                 </div>
 
 
