@@ -41,7 +41,7 @@ const DownloadBanner = () => {
 
     const handleClickDowLoad = (id:string, link:string) =>{
         if(id === "ios")
-            return alert("IOS chungs tôi đang phát triển")
+            return alert("Sắp có rồi đợi chúng tối xíu nữa thôi")
 
         window.open(link, "_blank", "noopener,noreferrer");
     }

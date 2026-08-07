@@ -18,7 +18,21 @@ const Report = () => {
                     <TitleBannerForm
                         classBox="flex flex-col justify-between items-center"
                         title1="Báo lỗi"
-                        ClassTitle1="!text-[140px], text-center text-white font-bold drop-shadow-lg"
+                        ClassTitle1="pt-[10px]
+                            text-[50px]
+                            md:text-7xl
+                            font-black
+                            uppercase
+                            tracking-wide
+                            bg-gradient-to-b
+                            from-yellow-200
+                            via-yellow-400
+                            to-orange-500
+                            bg-clip-text
+                            text-transparent
+                            drop-shadow-[0_4px_0_#7a3d00]
+                            [text-shadow:0_0_18px_rgba(255,200,0,.45)]"
+                        title2="TÌM LỖI CÓ QUÀ"
                         subTitle="Gửi báo cáo lỗi để chúng tôi hoàng thiền và tăng tính trải nghiệm"
                     />
                 </div>

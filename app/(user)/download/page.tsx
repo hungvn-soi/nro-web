@@ -18,14 +18,33 @@ import {
 import { ReactNode } from "react";
 import StepIcon from "@/components/dowload/StepIcon";
 
-const data = [
-    { icon: <FaWindows color="#0078D4"/>, title:"Windows Client", subTitle:"Cài đặt nhanh - Tự động cập nhật", btnText:"Dowload"},
-    { icon: <FaAndroid color="#3DDC84"/>, title: "APK Android", subTitle: "Cài đặt nhanh", btnText: "Dowload" },
-    { icon: <FaApple color="#007AFF" />, title: "IOS ( Sắp có )", subTitle: "Chúng tôi đang phát triển", btnText: "Apple Store", disabled : true},
+const DataDowloadFrame = [
+    { 
+        icon: <FaWindows color="#0078D4"/>, 
+        title:"Windows Client", 
+        subTitle:"Cài đặt nhanh - Tự động cập nhật", 
+        btnText:"Dowload", 
+        link: "https://drive.google.com/file/d/1wDiUU9Un-KXT2kf1GTCffDM3rYeQ4tLh/view?usp=sharing"
+    },
+    { 
+        icon: <FaAndroid color="#3DDC84" />, 
+        title: "APK Android", 
+        subTitle: "Cài đặt nhanh", 
+        btnText: "Dowload", 
+        link: "https://drive.google.com/file/d/1RwgLJ_jwa7TuYRWf-xka-OAwKGzN92FP/view?usp=sharing"
+    },
+    { 
+        icon: <FaApple color="#007AFF" />, 
+        title: "IOS ( Sắp có )", 
+        subTitle: "Chúng tôi đang phát triển", 
+        btnText: "Apple Store", 
+        disabled: true, 
+        link: ""
+    },
 
 ]
 
-const data2 = [
+const DataDowloadFrameHuongDanDowLoad = [
     {
         number: 1,
         icon: <CloudDownload color="white" size={50} />,
@@ -53,8 +72,9 @@ const data2 = [
 ]
 
 const DowloadGame = () => {
-    const HandleClick = () => {
-        alert("clieck 123123")
+    const HandleClick = (link: string) => {
+        if(!link) return
+        window.open(link, "_blank", "noopener,noreferrer");
     }
     return(
         <div>
@@ -67,7 +87,7 @@ const DowloadGame = () => {
                     <div className="w-full">
                         <DownloadFrame title="DOWLOAD NGAY ">
                             {
-                                data.map((item, index) => (
+                                DataDowloadFrame.map((item, index) => (
                                     <DownloadItem
                                         key={index}
                                         icon={item.icon}
@@ -75,6 +95,7 @@ const DowloadGame = () => {
                                         subtitle={item.subTitle}
                                         buttonText={item?.btnText}
                                         disabled={item?.disabled}
+                                        link={item.link}
                                         onClick={HandleClick}
                                     />
                                 ))
@@ -156,7 +177,7 @@ const DowloadGame = () => {
                 <div className="mt-10 mb-3 md:px-0 px-2 ">
                     <DownloadFrame title="HƯỚNG DẪN CÀI ĐẶT">
                         <div className="flex flex-col items-center justify-center gap-3 md:flex-row md:gap-0">
-                            {data2.map((item, index) => (
+                            {DataDowloadFrameHuongDanDowLoad.map((item, index) => (
                                 <div key={index} className="flex items-center justify-center">
                                     <DowloadHD
                                         icon={item.icon}
@@ -166,7 +187,7 @@ const DowloadGame = () => {
                                     />
 
                                     {/* Chỉ hiện mũi tên nếu chưa phải bước cuối */}
-                                    {index < data2.length - 1 && (
+                                    {index < DataDowloadFrameHuongDanDowLoad.length - 1 && (
                                         <div className="hidden md:block mx-5 text-white font-bold">
                                             Bước {index + 1}
                                         </div>

@@ -7,7 +7,8 @@ interface DownloadItemProps {
     size?: string;
     buttonText: string;
     disabled?: boolean;
-    onClick?: () => void;
+    link: string;
+    onClick: (link: string) => void;
 }
 
 export default function DownloadItem({
@@ -17,6 +18,7 @@ export default function DownloadItem({
     size,
     buttonText,
     disabled,
+    link,
     onClick,
 }: DownloadItemProps) {
     return (
@@ -41,7 +43,7 @@ export default function DownloadItem({
 
             <button
                 disabled={disabled}
-                onClick={onClick}
+                onClick={() => onClick(link)}
                 className={` rounded-lg md:px-7 px-2 py-3 font-bold transition
                 ${disabled
                         ? "cursor-not-allowed bg-gray-500 text-white"
