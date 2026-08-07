@@ -11,7 +11,7 @@ const SuKien = async() => {
             getAllEvents(),
         ]);
     return (
-        <div className="py-5">
+        <div className="lg:mt-[-50px] mt-0">
             <div className="w-full relative left-1/2 -translate-x-1/2 
                     bg-[url('/assets/event/event-mobi.webp')]
                     md:bg-[url('/assets/event/event-tablet.webp')]

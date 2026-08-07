@@ -47,9 +47,9 @@ const DownloadBanner = () => {
     }
 
     return (
-        <section className="relative overflow-hidden  px-6 lg:pt-35">
+        <section className="lg:mt-[50px] lg:m-0 my-2">
 
-            <div className="relative z-10 mx-auto max-w-5xl text-center md:top-0 mt-[50px]">
+            <div className="flex flex-col justify-around items-center top-0 lg:mt-[50px]">
                 {/* Title */}
                 <h1
                     className="
@@ -114,7 +114,7 @@ const DownloadBanner = () => {
                                 border-[#5e7ca7]
                                 bg-[#102748]
                                 lg:py-4
-                                py-2
+                                p-2
                                 font-bold
                                 text-white
                                 transition-all

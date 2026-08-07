@@ -66,7 +66,7 @@ const Napthe = () => {
     )
 
     return (
-        <div className="">
+        <div className="lg:mt-[-50px] mt-0">
             <BannerForm />
             <div className="max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-[40%_60%] grid-cols-1 gap-3 lg:p-0 px-2">
