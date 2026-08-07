@@ -1,6 +1,7 @@
 "use client"
 
 import { IPayment, IPaymentHistory } from "@/types/payment";
+import { formatNumber } from "@/utils/format";
 
 export interface RechargeHistory {
     id: number;
@@ -15,22 +16,9 @@ interface Props {
     data: IPaymentHistory[] | null;
 }
 
-const statusMap = {
-    success: {
-        label: "Thành công",
-        className: "text-green-400",
-    },
-    failed: {
-        label: "Thất bại",
-        className: "text-red-500",
-    },
-    pending: {
-        label: "Đang xử lý",
-        className: "text-yellow-400",
-    },
-};
 
 export default function CardHistory({ data }: Props) {
+    
     return (
         <>
             <div className="border-2 border-amber-400 rounded-2xl pt-5 px-5  w-full mt-5">
@@ -64,18 +52,22 @@ export default function CardHistory({ data }: Props) {
 
                                     <tbody>
                                         {
-                                            data && data.map((item) => (
+                                            data && data.map((item, index) => (
                                                 <tr
                                                     key={item.id}
                                                     className="border-t border-[#183555] text-sm text-white hover:bg-[#0d2645]"
                                                 >
-                                                    <td className="px-4 py-3">{item.id}</td>
-                                                    <td className="px-4 py-3">{item.amount}</td>
+                                                    <td className="px-4 py-3">{index + 1}</td>
+                                                    <td className="px-4 py-3">{formatNumber(item.amount)} VNĐ</td>
                                                     <td className="px-4 py-3">{item.orderCode}</td>
                                                     <td className="px-4 py-3">{item.paymentMethod}</td>
-                                                    <td className="px-4 py-3">{item.createdAt
-                                                        ? new Date(item.createdAt).toLocaleString("vi-VN")
-                                                        : "-"}</td>
+                                                    <td className="px-4 py-3">
+                                                        {item.createdAt
+                                                            ? new Date(
+                                                                new Date(item.createdAt).getTime() - 7 * 60 * 60 * 1000
+                                                            ).toLocaleString("vi-VN")
+                                                            : "-"}
+                                                    </td>
                                                     <td
                                                         className={`px-4 py-3 font-semibold`}
                                                     >
@@ -122,7 +114,9 @@ export default function CardHistory({ data }: Props) {
 
                                         <span className="text-gray-400">Thời gian</span>
                                         <span>{item.createdAt
-                                            ? new Date(item.createdAt).toLocaleString("vi-VN")
+                                            ? new Date(
+                                                new Date(item.createdAt).getTime() - 7 * 60 * 60 * 1000
+                                            ).toLocaleString("vi-VN")
                                             : "-"}</span>
                                     </div>
                                 </div>

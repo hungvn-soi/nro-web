@@ -15,49 +15,6 @@ const BangGia: IDataBangGia[] = [
     { id: 6, price: 500000, gem: 6000 },
     { id: 7, price: 1000000, gem: 14000 },
 ]
-const historyLsthanhtoan: RechargeHistory[] = [
-    {
-        id: 1,
-        amount: "100.000 VND",
-        gem: "1.200 Ngọc",
-        method: "Thẻ Viettel",
-        time: "20/07/2026 10:23",
-        status: "success",
-    },
-    {
-        id: 2,
-        amount: "50.000 VND",
-        gem: "560 Ngọc",
-        method: "MoMo",
-        time: "19/07/2026 15:45",
-        status: "success",
-    },
-    {
-        id: 3,
-        amount: "20.000 VND",
-        gem: "220 Ngọc",
-        method: "Thẻ Vinaphone",
-        time: "18/07/2026 09:12",
-        status: "success",
-    },
-    {
-        id: 4,
-        amount: "10.000 VND",
-        gem: "100 Ngọc",
-        method: "Thẻ Viettel",
-        time: "17/07/2026 21:30",
-        status: "success",
-    },
-    {
-        id: 5,
-        amount: "50.000 VND",
-        gem: "560 Ngọc",
-        method: "Banking",
-        time: "16/07/2026 11:05",
-        status: "failed",
-    },
-]
-
 
 const NapTheClient = () => {
     const {user} = useAuth()
@@ -74,47 +31,46 @@ const NapTheClient = () => {
             return;
         }
 
-        const getPaymentHistory = async () => {
-            try {
-                setIsLoading(true)
-                const res = await fetch(
-                    `/api/payment/history`,{
-                        method: "GET",
-                        cache: "no-store",
-                    }
-                );
-
-                const result = await res.json();
-
-                if (!res.ok || !result.success) {
-                    alert(result.message || "Không thể lấy lịch sử thanh toán");
-                    return;
-                }
-
-                if (!result.data) {
-                    setHistoryNap([]);
-                    return;
-                }      
-                setHistoryNap(result.data);
-
-            } catch (error) {
-                console.error(
-                    "GET payment history error:",
-                    error
-                );
-
-                alert("Có lỗi xảy ra khi lấy lịch sử thanh toán");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        getPaymentHistory()
+        handleLoadHistoryPayment()
 
 
     }, [user])
 
-    console.log("check data history: ", historyNap)
+    const handleLoadHistoryPayment = async () => {
+        try {
+            setIsLoading(true)
+            const res = await fetch(
+                `/api/payment/history`, {
+                method: "GET",
+                cache: "no-store",
+            }
+            );
+
+            const result = await res.json();
+            console.log("history: ", result.data)
+            if (!res.ok || !result.success) {
+                alert(result.message || "Không thể lấy lịch sử thanh toán");
+                return;
+            }
+
+            if (!result.data) {
+                setHistoryNap([]);
+                return;
+            }
+            setHistoryNap(result.data);
+
+        } catch (error) {
+            console.error(
+                "GET payment history error:",
+                error
+            );
+
+            alert("Có lỗi xảy ra khi lấy lịch sử thanh toán");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return(
         <div>
             <div className="grid lg:grid-cols-[40%_60%] grid-cols-1 gap-3 lg:p-0 px-2">
@@ -125,6 +81,7 @@ const NapTheClient = () => {
                 <HTTT
                     bangGia={BangGia}
                     selectGiaGoi={pirce}
+                    onReloadHistory={handleLoadHistoryPayment}
                 />
             </div>
 

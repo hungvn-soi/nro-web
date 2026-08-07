@@ -2,7 +2,7 @@
 
 import {AlertTriangle, Loader2, QrCode, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/context/AuthContext";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import LoadingOverlay from "../LoadingOverlay";
 import Countdown from "../Countdown";
 
@@ -10,6 +10,7 @@ interface Props {
     accountName: string;
     accountNumber: string;
     amount:number;
+    onReloadHistory ?: () => void
 }
 
 type PaymentStatus =
@@ -24,6 +25,7 @@ export default function BankTransferCard({
     accountName,
     accountNumber,
     amount,
+    onReloadHistory
 }: Props) {
     const { user } = useAuth()
     const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle");
@@ -35,7 +37,11 @@ export default function BankTransferCard({
         if(amount <= 0) return
     }, [amount])
 
-
+    useEffect(() => {
+        if (paymentStatus === "pending") {
+            onReloadHistory?.();
+        }
+    }, [paymentStatus]);
 
 
     const handleClickQRcode = async () => {
@@ -184,16 +190,19 @@ export default function BankTransferCard({
 
                 {paymentStatus === "idle" && (
                     <button
-                        className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#ffc107] text-lg font-bold text-[#1a1a1a] transition hover:bg-[#ffcf33] active:scale-[0.98] "
-
+                        className={`
+                            mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#ffc107] text-lg font-bold text-[#1a1a1a] transition hover:bg-[#ffcf33] 
+                            ${user ? "cursor-pointer active:scale-[0.98]" : "cursor-not-allowed"}
+                            `}
+                        disabled = {user ? false : true}
                         onClick={() => handleClickQRcode()}
                     >
                         <ShieldCheck size={20} />
-                            Thanh toán ngay
+                            {user ? "Thanh toán ngay" : "Đăng nhập để thực hiện thanh toán"}
                     </button>
                 )}
-            {/* LoadingOverlay */}
 
+    
                 {paymentStatus === "creating" && (
                     <div
                         className="relative mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#ffc107] text-lg font-bold text-[#1a1a1a] transition hover:bg-[#ffcf33] active:scale-[0.98] "
@@ -208,6 +217,7 @@ export default function BankTransferCard({
                 <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
+                            
                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
                                 <Loader2 className="h-5 w-5 animate-spin text-amber-600" />
                             </div>

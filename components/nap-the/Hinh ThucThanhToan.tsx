@@ -7,8 +7,9 @@ import { IDataBangGia } from "./GoiNap"
 interface IPops{
     bangGia: IDataBangGia[]
     selectGiaGoi: number
+    onReloadHistory ?: () => void
 }
-const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
+const HTTT = ({ bangGia, selectGiaGoi, onReloadHistory }: IPops) => {
 
     const DataTabs: IFormTab[] = [
         { 
@@ -19,6 +20,7 @@ const HTTT = ({ bangGia, selectGiaGoi }: IPops) => {
                     accountName="TRIEU QUANG HA"
                     accountNumber="xxxxxxxxxx"
                     amount={selectGiaGoi}
+                    onReloadHistory={onReloadHistory}  
                 /> 
         },
         {
