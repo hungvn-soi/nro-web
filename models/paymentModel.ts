@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { paymentsV2 } from "@/db/schema/paymentsV2";
-import { ICreatePaymentInput } from "@/types/payment";
+import { ICreatePaymentInput, IPaymentHistory } from "@/types/payment";
 import {
     and,
     eq,
@@ -113,8 +113,17 @@ export async function errorPayment(id: number) {
 /**
  * Lấy lịch sử nạp của 1 user
  */
-export async function getPaymentsByUserId(userId: number) {
+export async function getPaymentsByUserId(userId: number) : Promise<IPaymentHistory[] | null> {
     return await db.query.paymentsV2.findMany({
+        columns: {
+            id: true,
+            userId: true,
+            orderCode: true,
+            paymentMethod: true,
+            amount: true,
+            createdAt: true,
+            status: true,
+        },
         where: eq(paymentsV2.userId, userId),
         orderBy: (payments, { desc }) => [
             desc(payments.createdAt),

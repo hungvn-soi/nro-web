@@ -4,7 +4,6 @@ import ImportantNotice from "@/components/report/ImportantNotice"
 import ProcessingTime from "@/components/report/ProcessingTime"
 import SupportContact from "@/components/report/SupportContact"
 import TitleBannerForm from "@/components/TilebannerForm"
-import { Construction } from "lucide-react"
 
 const Report = () => {
 

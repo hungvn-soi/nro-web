@@ -13,3 +13,13 @@ export interface ICreatePaymentInput {
     paymentMethod: "bank" | "card";
     expiredAt: Date;
 }
+
+export interface IPaymentHistory {
+    id: number,
+    userId: number,
+    orderCode: string,
+    paymentMethod: "bank" | "card",
+    amount: number,
+    createdAt: Date,
+    status: string,
+}

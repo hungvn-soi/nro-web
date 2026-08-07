@@ -15,7 +15,7 @@ const AdminPage = () => {
     }, [user, router]);
 
     if (!user || !user.isAdmin) {
-        return null; // hoặc Loading...
+        return null; 
     }
 
     return (

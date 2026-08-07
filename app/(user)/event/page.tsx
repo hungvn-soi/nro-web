@@ -10,6 +10,7 @@ const SuKien = async() => {
             getHotEvent(),
             getAllEvents(),
         ]);
+        
     return (
         <div className="lg:mt-[-50px] mt-0">
             <div className="w-full relative left-1/2 -translate-x-1/2 
