@@ -5,7 +5,7 @@ const BanerPage = () => {
         <section
             className="
                 relative
-                md:min-h-125 min-h-60
+                lg:min-h-125 md:min-h-82 min-h-60
                 lg:bg-[url('/assets/banner/BanerDowload2.webp')]
                 bg-[url('/assets/banner/BanerDowload2Mobile.webp')]
                 bg-no-repeat

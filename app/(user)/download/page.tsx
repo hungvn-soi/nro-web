@@ -58,7 +58,7 @@ const DowloadGame = () => {
     }
     return(
         <div>
-            <div className="md:min-h-125 min-h-60 lg:mt-[-50px] mt-0">
+            <div className="lg:min-h-125 md:min-h-82 min-h-60 lg:mt-[-50px] mt-0">
                 <BanerPage />
             </div>
 

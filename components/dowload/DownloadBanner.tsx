@@ -49,10 +49,11 @@ const DownloadBanner = () => {
     return (
         <section className="lg:mt-[50px] lg:m-0 my-2">
 
-            <div className="flex flex-col justify-around items-center top-0 lg:mt-[50px]">
+            <div className="flex flex-col justify-around items-center top-0 md:mt-[50px]">
                 {/* Title */}
                 <h1
                     className="
+                        pt-[10px]
                         text-[50px]
                         md:text-7xl
                         font-black
