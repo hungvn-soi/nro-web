@@ -3,7 +3,6 @@ import { randomBytes } from "crypto";
 
 import { createPayment, existsOrderCode } from "@/models/paymentModel";
 import { getCurrentUser } from "@/lib/auth";
-// import { getCurrentUser } from "@/lib/auth";
 
 const ALLOWED_AMOUNTS = [
     10000,
@@ -12,24 +11,22 @@ const ALLOWED_AMOUNTS = [
     100000,
     200000,
     500000,
+    1000000,
 ];
 
 export async function POST(req: NextRequest) {
     try {
         const user = await getCurrentUser();
+
         if (!user) {
             return NextResponse.json(
                 {
                     success: false,
                     message: "Vui lòng đăng nhập.",
                 },
-                {
-                    status: 401,
-                }
+                { status: 401 }
             );
         }
-
-        console.log(user.id);
 
         const body = await req.json();
 
@@ -45,21 +42,13 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        //--------------------------------------------------
-
         let orderCode = generateOrderCode();
 
         while (await existsOrderCode(orderCode)) {
             orderCode = generateOrderCode();
         }
 
-        //--------------------------------------------------
-
-        const expiredAt = new Date(
-            Date.now() + 2 * 60 * 1000
-        );
-
-        //--------------------------------------------------
+        const expiredAt = new Date(Date.now() + 2 * 60 * 1000);
 
         const payment = await createPayment({
             userId: user.id,
@@ -69,14 +58,10 @@ export async function POST(req: NextRequest) {
             expiredAt,
         });
 
-        //--------------------------------------------------
-
         const qrUrl = generateQrUrl({
             amount,
             orderCode,
         });
-
-        //--------------------------------------------------
 
         return NextResponse.json({
             success: true,
@@ -88,15 +73,17 @@ export async function POST(req: NextRequest) {
                 qrUrl,
             },
         });
+    } catch (error) {
+        // Chỉ log ở server (Terminal / PM2)
+        console.error("========== CREATE PAYMENT ERROR ==========");
+        console.error(error);
+        console.error("==========================================");
 
-    } catch (err) {
-
-        console.error(err);
-
+        // Không trả lỗi thật cho client
         return NextResponse.json(
             {
                 success: false,
-                message: "Server Error",
+                message: "Có lỗi xảy ra, vui lòng thử lại sau.",
             },
             {
                 status: 500,
@@ -106,15 +93,12 @@ export async function POST(req: NextRequest) {
 }
 
 function generateOrderCode(length = 6) {
-
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
     let code = "";
 
     while (code.length < length) {
-
         const random = randomBytes(1)[0];
-
         code += chars[random % chars.length];
     }
 
@@ -128,16 +112,15 @@ function generateQrUrl({
     amount: number;
     orderCode: string;
 }) {
+    const params = new URLSearchParams({
+        bank: process.env.NEXT_PUBLIC_VIETQR_BANK!,
+        acc: process.env.NEXT_PUBLIC_VIETQR_ACCOUNT!,
+        template: "",
+        amount: amount.toString(),
+        des: orderCode,
+        showinfo: process.env.NEXT_PUBLIC_VIETQR_SHOWINFO!,
+        holder: process.env.NEXT_PUBLIC_VIETQR_HOLDER!,
+    });
 
-    // const params = new URLSearchParams({
-    //     bank: process.env.BANK_CODE!,
-    //     acc: process.env.BANK_ACCOUNT!,
-    //     holder: process.env.BANK_HOLDER!,
-    //     amount: amount.toString(),
-    //     des: orderCode,
-    //     template: "compact",
-    //     showinfo: "false",
-    // });
-
-    return `https://vietqr.app/img?bank=MBBank&acc=VQRQAKYKZ3846&template=&amount=${amount}&des=${orderCode}&showinfo=false&holder=VO%20NGOC%20HUNG`
+    return `https://vietqr.app/img?${params.toString()}`;
 }

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 
 const BangGia: IDataBangGia[] = [
-    { id: 1, price: 10000, gem: 100 },
+    { id: 1, price: 10000, gem: 100 }, 
     { id: 2, price: 20000, gem: 220 },
     { id: 3, price: 50000, gem: 560 },
     { id: 4, price: 100000, gem: 1200 },
@@ -59,11 +59,12 @@ const historyLsthanhtoan: RechargeHistory[] = [
 ]
 
 const Napthe = () => {
+    
     const[pirce, setPirce] = useState<number>(0)
-
     const handlePriceSelect = (price: number) => (
         setPirce(price)
     )
+
     return (
         <div className="">
             <BannerForm />

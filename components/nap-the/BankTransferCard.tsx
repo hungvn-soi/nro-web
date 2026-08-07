@@ -58,29 +58,41 @@ export default function BankTransferCard({
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    amount: amount
+                    amount,
                 }),
             });
 
-            const result = await res.json();
+            let result: any;
+
+            try {
+                result = await res.json();
+            } catch {
+                throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");
+            }
+
+            if (!res.ok) {
+                throw new Error(result.message || "Có lỗi xảy ra.");
+            }
 
             if (!result.success) {
-                setPaymentStatus("failed");
-                return;
+                throw new Error(result.message || "Có lỗi xảy ra.");
             }
 
             setQrCode(result.data.qrUrl);
+            setOrderCode(result.data.orderCode);
+            setEpireQrCode(result.data.expiredAt);
 
-            setOrderCode(result.data.orderCode)
-            // QR đã tạo thành công -> chờ thanh toán
             setPaymentStatus("pending");
-
-            //Set time off QR
-            setEpireQrCode(result.data.expiredAt)
-
         } catch (err) {
             console.error(err);
+
             setPaymentStatus("failed");
+
+            alert(
+                err instanceof Error
+                    ? err.message
+                    : "Không thể tạo mã QR."
+            );
         }
     };
 

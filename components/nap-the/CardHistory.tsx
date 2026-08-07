@@ -29,8 +29,6 @@ const statusMap = {
 export default function CardHistory({ data }: Props) {
     return (
         <>
-
-
             <div className="border-2 border-amber-400 rounded-2xl pt-5 px-5  w-full mt-5">
                 <h1 className="font-bold text-amber-400 uppercase   ">3. Lịch sử thanh toán</h1>
 
