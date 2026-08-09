@@ -5,6 +5,7 @@ import GoiNap, { IDataBangGia } from "./GoiNap"
 import HTTT from "./Hinh ThucThanhToan"
 import { IPaymentHistory } from "@/types/payment"
 import { useAuth } from "@/lib/context/AuthContext";
+import { IRechargePackageClient } from "@/types/rechargePackage"
 
 const BangGia: IDataBangGia[] = [
     { id: 1, price: 10000, gem: 100 },
@@ -16,7 +17,11 @@ const BangGia: IDataBangGia[] = [
     { id: 7, price: 1000000, gem: 14000 },
 ]
 
-const NapTheClient = () => {
+interface INapTheProps {
+    RechargePackage: IRechargePackageClient[]
+}
+
+const NapTheClient = ({ RechargePackage }:INapTheProps) => {
     const {user} = useAuth()
     const[pirce, setPirce] = useState<number>(0)
     const [historyNap, setHistoryNap] = useState < IPaymentHistory[] | null>(null)
@@ -30,9 +35,7 @@ const NapTheClient = () => {
             setHistoryNap([]);
             return;
         }
-
         handleLoadHistoryPayment()
-
 
     }, [user])
 
@@ -47,7 +50,7 @@ const NapTheClient = () => {
             );
 
             const result = await res.json();
-            console.log("history: ", result.data)
+            // console.log("history: ", result.data)
             if (!res.ok || !result.success) {
                 alert(result.message || "Không thể lấy lịch sử thanh toán");
                 return;
@@ -75,7 +78,7 @@ const NapTheClient = () => {
         <div>
             <div className="grid lg:grid-cols-[40%_60%] grid-cols-1 gap-3 lg:p-0 px-2">
                 <GoiNap
-                    data={BangGia}
+                    dataGoiNap={RechargePackage}
                     selectGoi={handlePriceSelect}
                 />
                 <HTTT

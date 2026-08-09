@@ -1,29 +1,20 @@
-"use client";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/context/AuthContext";
+export default async function AdminPage() {
+    const user = await getCurrentUser();
 
-const AdminPage = () => {
-    const { user } = useAuth();
-    const router = useRouter();
+    if (!user) {
+        redirect("/");
+    }
 
-    useEffect(() => {
-        if (!user || !user.isAdmin) {
-            router.replace("/");
-        }
-    }, [user, router]);
-
-    if (!user || !user.isAdmin) {
-        return null; 
+    if (!user.isAdmin) {
+        redirect("/");
     }
 
     return (
         <div>
-            test 123123123
             Welcome admin: {user.username}
         </div>
     );
-};
-
-export default AdminPage;
+}

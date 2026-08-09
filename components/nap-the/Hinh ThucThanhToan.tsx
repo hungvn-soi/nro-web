@@ -23,16 +23,16 @@ const HTTT = ({ bangGia, selectGiaGoi, onReloadHistory }: IPops) => {
                     onReloadHistory={onReloadHistory}  
                 /> 
         },
-        {
-            id: "thecao",
-            label: "Thẻ Cào",
-            content:
-                <CardRecharge
-                    dataBangGia={bangGia}
-                    selectGiaGoi={selectGiaGoi}
-                />
+        // {
+        //     id: "thecao",
+        //     label: "Thẻ Cào",
+        //     content:
+        //         <CardRecharge
+        //             dataBangGia={bangGia}
+        //             selectGiaGoi={selectGiaGoi}
+        //         />
 
-        },
+        // },
     ]
 
 

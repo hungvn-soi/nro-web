@@ -1,8 +1,10 @@
 "use client"
+import { IRechargePackageClient } from "@/types/rechargePackage";
 import { formatNumber } from "@/utils/format";
 import { Gem } from "lucide-react";
 import { Sun } from "lucide-react";
 import { useState } from "react";
+import LoadingOverlay from "../LoadingOverlay";
 
 
 export interface IDataBangGia {
@@ -11,11 +13,11 @@ export interface IDataBangGia {
     gem: number
 }
 interface IPops{
-    data: IDataBangGia[]
+    dataGoiNap: IRechargePackageClient[]
     selectGoi: (price: number)=> void
 }
 
-const GoiNap = ({ selectGoi, data }: IPops) => {
+const GoiNap = ({ selectGoi, dataGoiNap }: IPops) => {
     const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
     const [selectGoiUI, setSelectGoiUI] = useState<IDataBangGia | null>(null)
 
@@ -30,7 +32,7 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
             <h1 className="font-bold text-white uppercase   ">1. Chọn gói nạp</h1>
             <div>
                 {
-                   data.map((item) => (
+                   dataGoiNap && dataGoiNap.map((item) => (
                        <button
                            key={item.id}
                            onClick={() => handleSlectGoi(item)}
@@ -125,8 +127,6 @@ const GoiNap = ({ selectGoi, data }: IPops) => {
                         Nạp càng nhiều - Ưu đãi càng lớn!
                     </span>
                 </div>
-
-               
             </div>
         </div>
     )
