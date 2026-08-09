@@ -6,6 +6,7 @@ import { IRechargePackage, IRechargePackageStats } from "@/types/rechargePackage
 import { useEffect, useState } from "react"
 import TableGoiNap from "./tableGoiNap"
 import ModelGoiNap from "./model"
+import { useNotification } from "@/components/notification"
 
 type StatId = "total" | "active" | "inactive" | "totalGem";
 
@@ -71,6 +72,7 @@ interface IGoiNapClient {
 }   
 
 const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
+    const notify = useNotification();
     const [statsView, setStatsView] = useState<StatCard[]>(dataMauStats)
     const [isModel, setIsModel] = useState<boolean>(false)
     const [selectGoiNap, setSelectGoiNap] = useState<IRechargePackage | null>(null)
@@ -106,13 +108,22 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
         }
 
         if(type === "Delete"){
-            const confirmDelete = window.confirm(
-                `Bạn có chắc muốn xóa gói nạp STT: "${row.id}" - "${row.price}" không?`
-            );
 
-            if (confirmDelete) {
-                handleDeleteGoiNap(row);
-            }
+            notify.confirm({
+                title:"Xóa Gói Nạp",
+                message:"Bạn có chắc chắn xóa - dữ liệu sẽ không thể khôi phục",
+                onConfirm: () => {
+                    handleDeleteGoiNap(row);
+                },
+            })
+
+            // const confirmDelete = window.confirm(
+            //     `Bạn có chắc muốn xóa gói nạp STT: "${row.id}" - "${row.price}" không?`
+            // );
+
+            // if (confirmDelete) {
+            //     handleDeleteGoiNap(row);
+            // }
         }
     }
 
@@ -136,7 +147,12 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
     const handleDeleteGoiNap = async (goinap: IRechargePackage) => {
         const res = await fetch(`/api/admin/goinap/delete?id=${goinap.id}`, { method: "DELETE" });
         const dataRes = await res.json();
-
+        
+        if (dataRes.success){
+            notify.success(
+                dataRes.message
+            )
+        }
         console.log("check data res: ", dataRes)
     }
 
