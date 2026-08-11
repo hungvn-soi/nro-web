@@ -1,22 +1,11 @@
 "use client"
 import { use, useEffect, useState } from "react"
 import CardHistory, { RechargeHistory } from "./CardHistory"
-import GoiNap, { IDataBangGia } from "./GoiNap"
+import GoiNap from "./GoiNap"
 import HTTT from "./Hinh ThucThanhToan"
 import { IPaymentHistory } from "@/types/payment"
 import { useAuth } from "@/lib/context/AuthContext";
 import { IRechargePackageClient } from "@/types/rechargePackage"
-
-const BangGia: IDataBangGia[] = [
-    { id: 1, price: 10000, gem: 100 },
-    { id: 2, price: 20000, gem: 220 },
-    { id: 3, price: 50000, gem: 560 },
-    { id: 4, price: 100000, gem: 1200 },
-    { id: 5, price: 200000, gem: 2500 },
-    { id: 6, price: 500000, gem: 6000 },
-    { id: 7, price: 1000000, gem: 14000 },
-]
-
 interface INapTheProps {
     RechargePackage: IRechargePackageClient[]
 }
@@ -82,7 +71,6 @@ const NapTheClient = ({ RechargePackage }:INapTheProps) => {
                     selectGoi={handlePriceSelect}
                 />
                 <HTTT
-                    bangGia={BangGia}
                     selectGiaGoi={pirce}
                     onReloadHistory={handleLoadHistoryPayment}
                 />

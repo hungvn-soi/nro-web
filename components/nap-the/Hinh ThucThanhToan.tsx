@@ -5,11 +5,11 @@ import { IDataBangGia } from "./GoiNap"
 
 
 interface IPops{
-    bangGia: IDataBangGia[]
+    // bangGia: IDataBangGia[]
     selectGiaGoi: number
     onReloadHistory ?: () => void
 }
-const HTTT = ({ bangGia, selectGiaGoi, onReloadHistory }: IPops) => {
+const HTTT = ({ selectGiaGoi, onReloadHistory }: IPops) => {
 
     const DataTabs: IFormTab[] = [
         { 

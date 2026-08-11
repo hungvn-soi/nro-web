@@ -47,6 +47,24 @@ export async function getPaymentById(id: number) {
 }
 
 /**
+ * Lấy thông tin status theo payment ID
+ * @param paymentId 
+ * @returns 
+ */
+export async function getPaymentStatus(paymentId: number) {
+    const result = await db
+        .select({
+            id: paymentsV2.id,
+            status: paymentsV2.status,
+        })
+        .from(paymentsV2)
+        .where(eq(paymentsV2.id, paymentId))
+        .limit(1);
+
+    return result[0] || null;
+}
+
+/**
  * Lấy giao dịch theo OrderCode
  */
 export async function getPaymentByOrderCode(orderCode: string) {

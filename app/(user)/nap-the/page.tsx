@@ -5,7 +5,6 @@ import { getActiveRechargePackages } from "@/models/rechargePackageModel"
 const Napthe = async () => {
 
     const RechargePackages = await getActiveRechargePackages()
-    console.log("check data gói nạp", RechargePackages)
     return (
         <div className="lg:-mt-12.5 mt-0">
             <BannerForm />
