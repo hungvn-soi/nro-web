@@ -119,12 +119,16 @@ export async function getRechargePackageById(id: number) {
 export async function createRechargePackage(
     data: ICreateRechargePackage
 ) {
+    if (data.price <= 0) {
+        throw new Error("Giá trị gói nạp chưa đúng! Vui Lòng kiểm tra lại");
+    }
+
     const result = await db
         .insert(rechargePackages)
         .values({
             price: data.price,
             gem: data.gem,
-            status: data.status ?? 1,
+            status: data.status === true ? 1 : 0,
             sortOrder: data.sortOrder ?? 0,
         });
 

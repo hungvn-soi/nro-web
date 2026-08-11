@@ -1,4 +1,3 @@
-// app/api/rechargePackages/delete/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "@/lib/withErrorHandler";
 import { deleteRechargePackage } from "@/models/rechargePackageModel";

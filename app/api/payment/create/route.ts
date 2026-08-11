@@ -4,16 +4,6 @@ import { randomBytes } from "crypto";
 import { createPayment, existsOrderCode } from "@/models/paymentModel";
 import { getCurrentUser } from "@/lib/auth";
 
-const ALLOWED_AMOUNTS = [
-    10000,
-    20000,
-    50000,
-    100000,
-    200000,
-    500000,
-    1000000,
-];
-
 export async function POST(req: NextRequest) {
     try {
         const user = await getCurrentUser();
@@ -32,15 +22,6 @@ export async function POST(req: NextRequest) {
 
         const amount = Number(body.amount);
 
-        if (!ALLOWED_AMOUNTS.includes(amount)) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Mệnh giá không hợp lệ.",
-                },
-                { status: 400 }
-            );
-        }
 
         let orderCode = generateOrderCode();
 

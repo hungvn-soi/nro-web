@@ -2,7 +2,7 @@
 import { CircleCheck, EyeOff, Gem, Layers3 } from "lucide-react"
 import TitleAdmin from "../TitlePage/titleAdmin"
 import BoxStastInfo from "./statsInfo"
-import { IRechargePackage, IRechargePackageStats } from "@/types/rechargePackage"
+import { ICreateRechargePackage, IRechargePackage, IRechargePackageStats, IUpdateRechargePackage } from "@/types/rechargePackage"
 import { useEffect, useState } from "react"
 import TableGoiNap from "./tableGoiNap"
 import ModelGoiNap from "./model"
@@ -73,22 +73,21 @@ interface IGoiNapClient {
 
 const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
     const notify = useNotification();
+    const [tableView, setTableView] = useState<IRechargePackage[]>(tableGoiNap)
     const [statsView, setStatsView] = useState<StatCard[]>(dataMauStats)
     const [isModel, setIsModel] = useState<boolean>(false)
     const [selectGoiNap, setSelectGoiNap] = useState<IRechargePackage | null>(null)
     const [typeModel, setTypeModel] = useState<"Edit" | "Create" | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect (()=> {
         if(!statsGoi) return
-
         const data = dataMauStats.map((item) => ({
             ...item,
             value: statsGoi[item.id]
         }))
         setStatsView(data)
     },[statsGoi])
-
-
 
 
     //Handle Thêm mới gói nạp
@@ -108,7 +107,6 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
         }
 
         if(type === "Delete"){
-
             notify.confirm({
                 title:"Xóa Gói Nạp",
                 message:"Bạn có chắc chắn xóa - dữ liệu sẽ không thể khôi phục",
@@ -117,29 +115,55 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
                 },
             })
 
-            // const confirmDelete = window.confirm(
-            //     `Bạn có chắc muốn xóa gói nạp STT: "${row.id}" - "${row.price}" không?`
-            // );
-
-            // if (confirmDelete) {
-            //     handleDeleteGoiNap(row);
-            // }
         }
     }
 
     //Handle Action Model
-    const handleActionModel = (isEdit: boolean, data:IRechargePackage) => {
+    const handleActionModel = async (isEdit: boolean, data:IRechargePackage) => {
         if(isEdit){
-            console.log("Cập nhật lại gói nạp: ", data)
+            // await handleUpdateData()
+            // setSelectGoiNap(null)
+            // setTypeModel(null)
+            // setIsModel(false)
+            // return
+            if(data.id <= 0 || data.price <= 0){
+                notify.error("Vui lòng kiểm tra lại giá và id")
+                return 
+            }
+            const dataUpdate: IUpdateRechargePackage = {
+                price: data.price,
+                gem: data.gem,
+                sortOrder: data.sortOrder,
+                status: data.status === true ? 1 : 0
+            } 
+
+            await handleUpdateData(data.id, dataUpdate)
             setSelectGoiNap(null)
             setTypeModel(null)
-            return
+            setIsModel(false)
         }
         if(!isEdit){
-            console.log("Tạo mới gói nạp: ", data)
-            setSelectGoiNap(null)
-            setTypeModel(null)
-            return
+            try {
+                setIsLoading(true)
+                if (!data.id || !data.createdAt || !data.updatedAt) {
+                    const dataCreate = {
+                        price: data.price,
+                        gem: data.gem,
+                        status: data.status,
+                        sortOrder: data.sortOrder
+                    }
+                    await handleCreateGoiNap(dataCreate)
+                }
+                setSelectGoiNap(null)
+                setTypeModel(null)
+            } catch (error) {
+                console.log("tạo gói nạp lỗi:", error)
+                notify.error(
+                    "Đã có lối xảy ra"
+                )
+            } finally {
+                setIsLoading(false)
+            }
         }
     }
 
@@ -152,8 +176,93 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
             notify.success(
                 dataRes.message
             )
+            handleRefetchData()
+
         }
-        console.log("check data res: ", dataRes)
+    }
+
+    const handleCreateGoiNap = async (create: ICreateRechargePackage) => {
+        try {
+
+            const res = await fetch(`/api/admin/goinap/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(create),
+            })
+
+            const dataRes = await res.json()
+
+            if (!dataRes.success) {
+                notify.error(dataRes.message || "Không thể thêm gói nạp")
+                return
+            }
+
+            setIsModel(false)
+            // Chỉ thông báo success ở đây
+            notify.success(dataRes.message)
+
+            // Chỉ reload data, không notify
+            await handleRefetchData()
+
+        } catch (error) {
+            console.log("tạo gói nạp lỗi:",error)
+            notify.error("Đã có lỗi xảy ra")
+        } 
+    }
+
+    const handleUpdateData = async (id:number, dataUpdate: IUpdateRechargePackage) => {
+        if (!id || id <= 0) {
+            notify.error("ID không hợp lệ vui lòng kiểm tra lại")
+            return
+        }
+
+        if (!dataUpdate || dataUpdate.price <= 0) {
+            notify.error("Giá trị gói nạp không được là: 0")
+            return
+        }
+        try {
+            setIsLoading(true)
+
+            const res = await fetch(`/api/admin/goinap/update?id=${id}`,{
+                method:"PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataUpdate),
+            })
+            const dataRes = await res.json()
+
+            if (!dataRes.success) {
+                notify.error(dataRes.message || "Đã có lỗi cập nhật")
+                return
+            }
+
+            setIsModel(false)
+            notify.success(dataRes.message)
+            await handleRefetchData()
+
+        } catch (error) {
+            notify.error("Đã có lỗi xảy ra")
+        } finally { setIsLoading(false) }
+    }
+
+    const handleRefetchData = async () => {
+        try {
+            setIsLoading(true)
+
+            const res = await fetch(`/api/admin/goinap`)
+            const dataRes = await res.json()
+
+            if (dataRes.success) {
+                setTableView(dataRes.data)
+            }
+        } catch (error) {
+            notify.error("Đã có lỗi xảy ra")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -181,7 +290,7 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
 
             <div className="mt-5">
                 <TableGoiNap
-                    dataGoiNap={tableGoiNap}
+                    dataGoiNap={tableView}
                     actionTible={handleActionTible}
                 />
             </div>
@@ -190,6 +299,7 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
             {
                 isModel && (
                     <ModelGoiNap
+                        isloading={isLoading}
                         type={typeModel}
                         onClose={() => setIsModel(!isModel)}
                         dataForm={selectGoiNap}

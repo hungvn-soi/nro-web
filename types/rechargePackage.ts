@@ -19,12 +19,12 @@ export interface IRechargePackageClient {
 export interface ICreateRechargePackage {
     price: number;
     gem: number;
-    status?: number;
+    status: boolean;
     sortOrder?: number;
 }
 
 export interface IUpdateRechargePackage {
-    price?: number;
+    price: number;
     gem?: number;
     status?: number;
     sortOrder?: number;
