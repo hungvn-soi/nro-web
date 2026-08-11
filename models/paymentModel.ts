@@ -134,13 +134,32 @@ export async function getPaymentsByUserId(userId: number) : Promise<IPaymentHist
 /**
  * Kiểm tra giao dịch pending còn hiệu lực
  */
+// export async function getPendingPayment(
+//     orderCode: string
+// ) {
+//     return await db.query.paymentsV2.findFirst({
+//         where: and(
+//             eq(paymentsV2.orderCode, orderCode),
+//             eq(paymentsV2.status, "pending")
+//         ),
+//     });
+// }
+
+/**
+ * Lấy payment đang ở trạng thái pending theo orderCode
+ */
 export async function getPendingPayment(
     orderCode: string
 ) {
-    return await db.query.paymentsV2.findFirst({
+    console.log("check orderCode: ", orderCode)
+    const check1 = await db.query.paymentsV2.findFirst({
         where: and(
             eq(paymentsV2.orderCode, orderCode),
             eq(paymentsV2.status, "pending")
         ),
     });
+
+    console.log("check check: ", check1)
+
+    return check1
 }
