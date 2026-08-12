@@ -112,7 +112,7 @@ export default function Footer() {
                 {/* Bottom */}
 
                 <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-gray-500 md:flex-row">
-                    <p>© 2024 Ngọc Rồng Zenz. All Rights Reserved. Prod-v.0.1.0</p>
+                    <p>© 2024 Ngọc Rồng Zenz. All Rights Reserved. Prod-v.0.1.1</p>
 
                     <div className="flex gap-6">
                         <Link href="/privacy" className="hover:text-white">
