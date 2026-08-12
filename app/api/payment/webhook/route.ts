@@ -56,10 +56,6 @@ export async function POST(req: Request) {
 
         const authorization =
             req.headers.get("authorization");
-
-        console.log("check authorization client: ", authorization)
-        console.log("check sepayApiKey env: ", sepayApiKey)
-
         const expectedAuthorization =
             `Apikey ${sepayApiKey}`;
 
