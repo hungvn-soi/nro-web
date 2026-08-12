@@ -35,46 +35,46 @@ export async function POST(req: Request) {
         // 1. VERIFY WEBHOOK
         // =================================================
 
-        // const sepayApiKey =
-        //     process.env.SEPAY_WEBHOOK_API_KEY;
+        const sepayApiKey =
+            process.env.SEPAY_WEBHOOK_API_KEY;
 
-        // if (!sepayApiKey) {
-        //     console.error(
-        //         "[SEPAY] SEPAY_WEBHOOK_API_KEY chưa được cấu hình"
-        //     );
+        if (!sepayApiKey) {
+            console.error(
+                "[SEPAY] SEPAY_WEBHOOK_API_KEY chưa được cấu hình"
+            );
 
-        //     return NextResponse.json(
-        //         {
-        //             success: false,
-        //             message: "Webhook configuration error",
-        //         },
-        //         {
-        //             status: 500,
-        //         }
-        //     );
-        // }
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Webhook configuration error",
+                },
+                {
+                    status: 500,
+                }
+            );
+        }
 
-        // const authorization =
-        //     req.headers.get("authorization");
+        const authorization =
+            req.headers.get("authorization");
 
-        // const expectedAuthorization =
-        //     `Apikey ${sepayApiKey}`;
+        const expectedAuthorization =
+            `Apikey ${sepayApiKey}`;
 
-        // if (authorization !== expectedAuthorization) {
-        //     console.error(
-        //         "[SEPAY] Unauthorized webhook request"
-        //     );
+        if (authorization !== expectedAuthorization) {
+            console.error(
+                "[SEPAY] Unauthorized webhook request"
+            );
 
-        //     return NextResponse.json(
-        //         {
-        //             success: false,
-        //             message: "Unauthorized",
-        //         },
-        //         {
-        //             status: 401,
-        //         }
-        //     );
-        // }
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Unauthorized",
+                },
+                {
+                    status: 401,
+                }
+            );
+        }
 
 
         // =================================================
