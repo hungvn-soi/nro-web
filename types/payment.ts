@@ -23,3 +23,23 @@ export interface IPaymentHistory {
     createdAt: Date,
     status: string,
 }
+
+export interface IPaymentTableALL {
+    id: number;
+    userId: number;
+    orderCode: string;
+    sepayTransactionId: string | null;
+    paymentMethod: "bank" | "card";
+    amount: number;
+    createdAt: Date;
+    expiredAt: Date;
+    status: "pending" | "complete" | "expired" | "error";
+}
+
+export interface IPaymentStatus {
+    totalRevenue: number;
+    totalTransactions: number;
+    completed: number;
+    pending: number;
+    error: number;
+}

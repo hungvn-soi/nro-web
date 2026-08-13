@@ -10,12 +10,13 @@ import { useNotification } from "@/components/notification"
 
 type StatId = "total" | "active" | "inactive" | "totalGem";
 
-interface StatCard {
+export interface StatCard {
     id: StatId;
     icon: React.ReactNode;
     title: React.ReactNode;
     value: number;
 }
+
 const dataMauStats: StatCard[] = [
     {
         id: "total",
@@ -121,11 +122,6 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
     //Handle Action Model
     const handleActionModel = async (isEdit: boolean, data:IRechargePackage) => {
         if(isEdit){
-            // await handleUpdateData()
-            // setSelectGoiNap(null)
-            // setTypeModel(null)
-            // setIsModel(false)
-            // return
             if(data.id <= 0 || data.price <= 0){
                 notify.error("Vui lòng kiểm tra lại giá và id")
                 return 
@@ -278,6 +274,7 @@ const GoiNapClient = ({ statsGoi, tableGoiNap }:IGoiNapClient) => {
                     statsView && statsView.map ((item, index) => (
                        <div className="w-[30%]" key={index}>
                             <BoxStastInfo
+                                id={item.id}
                                 key={index}
                                 icon={item.icon}
                                 title={item.title}

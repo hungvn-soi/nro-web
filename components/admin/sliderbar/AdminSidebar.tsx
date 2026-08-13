@@ -27,7 +27,6 @@ import {
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
 
 type MenuItem = {
     title: string;
@@ -127,8 +126,8 @@ const menuGroups: MenuGroup[] = [
                 icon: CreditCard,
             },
             {
-                title: "Quản lý banner",
-                href: "/admin/banners",
+                title: "Lịch sử thanh toán",
+                href: "/admin/payment",
                 icon: Image,
             },
             {

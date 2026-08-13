@@ -58,9 +58,11 @@ export default function LeftBanner() {
                 <Image
                     src="/assets/image/banner.webp"
                     alt="Banner Dragon Ball"
-                    width={640}
-                    height={640}
+                    width={1243}
+                    height={676}
                     priority
+                    sizes="(min-width: 1024px) 721px, 100vw"
+                    quality={65}
                     className="w-lg h-auto"
                 />
 

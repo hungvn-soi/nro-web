@@ -1,9 +1,10 @@
 import { db } from "@/db";
 import { paymentsV2 } from "@/db/schema/paymentsV2";
-import { ICreatePaymentInput, IPaymentHistory } from "@/types/payment";
+import { ICreatePaymentInput, IPaymentHistory, IPaymentStatus, IPaymentTableALL } from "@/types/payment";
 import {
     and,
     eq,
+    sql,
 } from "drizzle-orm";
 
 
@@ -150,20 +151,6 @@ export async function getPaymentsByUserId(userId: number) : Promise<IPaymentHist
 }
 
 /**
- * Kiểm tra giao dịch pending còn hiệu lực
- */
-// export async function getPendingPayment(
-//     orderCode: string
-// ) {
-//     return await db.query.paymentsV2.findFirst({
-//         where: and(
-//             eq(paymentsV2.orderCode, orderCode),
-//             eq(paymentsV2.status, "pending")
-//         ),
-//     });
-// }
-
-/**
  * Lấy payment đang ở trạng thái pending theo orderCode
  */
 export async function getPendingPayment(
@@ -180,4 +167,99 @@ export async function getPendingPayment(
     console.log("check check: ", check1)
 
     return check1
+}
+
+
+/**
+ * Status thống kê payment
+ */
+
+export async function getPaymentStats(): Promise<IPaymentStatus> {
+    const result = await db
+        .select({
+            // Tổng doanh thu
+            // Chỉ tính những giao dịch đã complete
+            totalRevenue: sql<number>`
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN ${paymentsV2.status} = 'complete'
+                            THEN ${paymentsV2.amount}
+                            ELSE 0
+                        END
+                    ),
+                    0
+                )
+            `,
+
+            // Tổng tất cả giao dịch
+            totalTransactions: sql<number>`
+                COUNT(*)
+            `,
+
+            // Giao dịch thành công
+            completed: sql<number>`
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN ${paymentsV2.status} = 'complete'
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                )
+            `,
+
+            // Giao dịch đang chờ xử lý
+            pending: sql<number>`
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN ${paymentsV2.status} = 'pending'
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                )
+            `,
+
+            // Giao dịch lỗi
+            error: sql<number>`
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN ${paymentsV2.status} = 'error'
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                )
+            `,
+        })
+        .from(paymentsV2);
+
+    const data = result[0];
+
+    return {
+        totalRevenue: Number(data?.totalRevenue ?? 0),
+        totalTransactions: Number(data?.totalTransactions ?? 0),
+        completed: Number(data?.completed ?? 0),
+        pending: Number(data?.pending ?? 0),
+        error: Number(data?.error ?? 0),
+    };
+}
+
+/**
+ * Lấy tất cả giao dịch thanh toán
+ * Dùng cho Admin View
+ */
+export async function getAllPayments(): Promise<IPaymentTableALL[]> {
+    return await db.query.paymentsV2.findMany({
+        orderBy: (payments, { desc }) => [
+            desc(payments.createdAt),
+        ],
+    });
 }

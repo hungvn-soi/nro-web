@@ -2,8 +2,8 @@
 import { formatNumber } from "@/utils/format"
 import { ReactNode } from "react"
 
-
-interface IBoxStatsInfo {
+export interface IBoxStatsInfo {
+    id:string
     icon: ReactNode
     title: ReactNode
     value: number

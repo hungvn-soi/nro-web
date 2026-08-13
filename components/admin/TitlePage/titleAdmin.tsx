@@ -5,8 +5,9 @@ interface ITitleAdmin {
     title: string
     subTitle: string
     actionAdd?: () => void
+    viewAdd?: boolean
 }
-const TitleAdmin = ({ title , subTitle, actionAdd}: ITitleAdmin) => {
+const TitleAdmin = ({ title, subTitle, actionAdd, viewAdd = true}: ITitleAdmin) => {
     return(
         <div className="w-full h-full flex justify-between items-center px-3">
             <div>
@@ -15,13 +16,17 @@ const TitleAdmin = ({ title , subTitle, actionAdd}: ITitleAdmin) => {
             </div>
 
             <div className="">
-                <button 
-                    className="flex justify-center items-center py-2 px-3 bg-blue-600 hover:bg-blue-800 rounded-xl active:scale-0.8 text-white"
-                    onClick={actionAdd}
-                >
-                    <Plus size={20} />
-                    Thêm gói nạp
-                </button>
+                {
+                    viewAdd && (
+                        <button
+                            className="flex justify-center items-center py-2 px-3 bg-blue-600 hover:bg-blue-800 rounded-xl active:scale-0.8 text-white"
+                            onClick={actionAdd}
+                        >
+                            <Plus size={20} />
+                            Thêm gói nạp
+                        </button>
+                    )
+                }
             </div>
         </div>
     )

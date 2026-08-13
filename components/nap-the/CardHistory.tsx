@@ -43,7 +43,7 @@ export default function CardHistory({ data }: Props) {
                                         <tr className="text-sm text-gray-300">
                                             <th className="px-4 py-3 text-left w-14">#</th>
                                             <th className="px-4 py-3 text-left">Mệnh giá</th>
-                                            <th className="px-4 py-3 text-left">Order Code</th>
+                                            <th className="px-4 py-3 text-left">Nội Dung</th>
                                             <th className="px-4 py-3 text-left">Phương thức</th>
                                             <th className="px-4 py-3 text-left">Thời gian</th>
                                             <th className="px-4 py-3 text-left">Trạng thái</th>

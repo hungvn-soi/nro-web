@@ -39,7 +39,6 @@ const NapTheClient = ({ RechargePackage }:INapTheProps) => {
             );
 
             const result = await res.json();
-            // console.log("history: ", result.data)
             if (!res.ok || !result.success) {
                 alert(result.message || "Không thể lấy lịch sử thanh toán");
                 return;

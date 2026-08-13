@@ -190,6 +190,7 @@ export default function BankTransferCard({
         setEpireQrCode("");
         setOrderCode("");
         setPaymentId(null);
+        onReloadHistory?.()
     };
 
     return (
