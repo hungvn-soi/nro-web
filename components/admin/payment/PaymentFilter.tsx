@@ -74,40 +74,6 @@ export default function PaymentFilter({
             tab: activeTab,
         });
     };
-
-    // const tabs = [
-    //     {
-    //         id: "all",
-    //         label: "Tất cả",
-    //         count: counts.all,
-    //         icon: null,
-    //     },
-    //     {
-    //         id: "success",
-    //         label: "Thành công",
-    //         count: counts.success,
-    //         icon: <Check className="h-3 w-3" />,
-    //     },
-    //     {
-    //         id: "pending",
-    //         label: "Đang chờ",
-    //         count: counts.pending,
-    //         icon: <Clock3 className="h-3 w-3" />,
-    //     },
-    //     {
-    //         id: "expired",
-    //         label: "Hết hạn",
-    //         count: counts.expired,
-    //         icon: <Hourglass className="h-3 w-3" />,
-    //     },
-    //     {
-    //         id: "error",
-    //         label: "Lỗi",
-    //         count: counts.error,
-    //         icon: <CircleX className="h-3 w-3" />,
-    //     },
-    // ];
-
     return (
         <div className="w-full rounded-xl border border-slate-100 bg-white shadow-sm">
             {/* ================= FILTER ================= */}

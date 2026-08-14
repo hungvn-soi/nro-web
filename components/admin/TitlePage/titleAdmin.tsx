@@ -23,7 +23,7 @@ const TitleAdmin = ({ title, subTitle, actionAdd, viewAdd = true}: ITitleAdmin) 
                             onClick={actionAdd}
                         >
                             <Plus size={20} />
-                            Thêm gói nạp
+                            Thêm mới
                         </button>
                     )
                 }

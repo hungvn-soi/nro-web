@@ -18,6 +18,7 @@ import {
     Image,
     Bell,
     Wrench,
+    BadgePercent,
     Shield,
     FileClock,
     DatabaseBackup,
@@ -40,81 +41,9 @@ type MenuGroup = {
 };
 
 const menuGroups: MenuGroup[] = [
-    // {
-    //     title: "TỔNG QUAN",
-    //     items: [
-    //         {
-    //             title: "Dashboard",
-    //             href: "/admin",
-    //             icon: LayoutDashboard,
-    //         },
-    //         {
-    //             title: "Thông tin server",
-    //             href: "/admin/server",
-    //             icon: Server,
-    //         },
-    //     ],
-    // },
-
-    // {
-    //     title: "QUẢN LÝ",
-    //     items: [
-    //         {
-    //             title: "Người chơi",
-    //             href: "/admin/players",
-    //             icon: Users,
-    //         },
-    //         {
-    //             title: "Nhân vật",
-    //             href: "/admin/characters",
-    //             icon: UserRound,
-    //         },
-    //         {
-    //             title: "Vật phẩm",
-    //             href: "/admin/items",
-    //             icon: Package,
-    //         },
-    //         {
-    //             title: "Shop / Cửa hàng",
-    //             href: "/admin/shop",
-    //             icon: ShoppingBag,
-    //         },
-    //         {
-    //             title: "Nhiệm vụ",
-    //             href: "/admin/quests",
-    //             icon: ClipboardList,
-    //         },
-    //         {
-    //             title: "Sự kiện",
-    //             href: "/admin/events",
-    //             icon: CalendarDays,
-    //         },
-    //         {
-    //             title: "Boss",
-    //             href: "/admin/boss",
-    //             icon: Skull,
-    //         },
-    //         {
-    //             title: "Bản đồ",
-    //             href: "/admin/maps",
-    //             icon: Map,
-    //         },
-    //         {
-    //             title: "Bang hội",
-    //             href: "/admin/guilds",
-    //             icon: UsersRound,
-    //         },
-    //     ],
-    // },
-
     {
         title: "CẤU HÌNH",
         items: [
-            // {
-            //     title: "Cấu hình game",
-            //     href: "/admin/settings/game",
-            //     icon: Settings,
-            // },
             {
                 title: "Cấu hình web",
                 href: "/admin/settings/web",
@@ -131,9 +60,9 @@ const menuGroups: MenuGroup[] = [
                 icon: Image,
             },
             {
-                title: "Thông báo",
-                href: "/admin/notifications",
-                icon: Bell,
+                title: "giftcode",
+                href: "/admin/giftcode",
+                icon: BadgePercent,
             },
             {
                 title: "Bảo trì",
@@ -142,37 +71,6 @@ const menuGroups: MenuGroup[] = [
             },
         ],
     },
-
-    // {
-    //     title: "HỆ THỐNG",
-    //     items: [
-    //         {
-    //             title: "Tài khoản admin",
-    //             href: "/admin/accounts",
-    //             icon: UserRound,
-    //         },
-    //         {
-    //             title: "Phân quyền",
-    //             href: "/admin/permissions",
-    //             icon: Shield,
-    //         },
-    //         {
-    //             title: "Nhật ký hoạt động",
-    //             href: "/admin/logs",
-    //             icon: FileClock,
-    //         },
-    //         {
-    //             title: "Sao lưu dữ liệu",
-    //             href: "/admin/backup",
-    //             icon: DatabaseBackup,
-    //         },
-    //         {
-    //             title: "Cài đặt hệ thống",
-    //             href: "/admin/settings",
-    //             icon: Cog,
-    //         },
-    //     ],
-    // },
 ];
 
 export default function AdminSidebar() {
