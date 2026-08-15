@@ -11,6 +11,7 @@ export interface ICreateGiftcode {
     code: string;
     countLeft: number;
     detail: string;
+    datecreate: Date;
     expired: Date;
 }
 

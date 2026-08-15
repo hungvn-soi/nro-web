@@ -3,13 +3,17 @@ import BoxStast, { IBoxStatsAdmin } from "../BoxStast"
 import TitleAdmin from "../TitlePage/titleAdmin"
 import { Share2, Timer, CircleDollarSign, TimerOff, Search } from "lucide-react";
 import TableGiftCode from "./TableGiftClode";
-import { IStasGiftCode, IViewTableGiftCode } from "@/types/giftcode";
+import { ICreateGiftcode, IStasGiftCode, IViewTableGiftCode } from "@/types/giftcode";
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import GiftModel from "./GiftModel";
+import { IItemTemplate } from "@/models/itemTemplate";
+import { useNotification } from "@/components/notification";
 
 
 interface IGiftCodeClient {
     dataStust: IStasGiftCode
     dataTableGiftCode: IViewTableGiftCode[]
+    opitonItem: IItemTemplate[]
 }
 interface IBoxStats {
     id: keyof IStasGiftCode,
@@ -18,12 +22,12 @@ interface IBoxStats {
     value: number
 }
 
-const GiftCodeClient = ({ dataStust, dataTableGiftCode }: IGiftCodeClient) => {
+const GiftCodeClient = ({ dataStust, dataTableGiftCode, opitonItem }: IGiftCodeClient) => {
+    const notify = useNotification();
     const [dataBox, setDataBox] = useState<IBoxStatsAdmin[]>()
     const [dataViewTable, setDataViewTable] = useState<IViewTableGiftCode[]>(dataTableGiftCode)
     const [isOpenModel, setIsOpenModel] = useState<boolean>(false)
     const [keyword, setKeyword] = useState<string>("")
-
 
     //Data Box Stust
     const dataBoxStast: IBoxStats[] = [
@@ -114,6 +118,43 @@ const GiftCodeClient = ({ dataStust, dataTableGiftCode }: IGiftCodeClient) => {
         setDataViewTable(dataViewTable)
     }, [dataTableGiftCode, keyword]);
 
+
+
+    const handleActionModel = async (data:ICreateGiftcode) => {
+        await handleCreateGoiNap(data)
+    }
+
+    const handleCreateGoiNap = async (create: ICreateGiftcode) => {
+        try {
+
+            const res = await fetch(`/api/admin/giftCode/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(create),
+            })
+
+            const dataRes = await res.json()
+
+            if (!dataRes.success) {
+                notify.error(dataRes.message || "Không thể  tạo giftCode")
+                return
+            }
+
+            setIsOpenModel(false)
+            // Chỉ thông báo success ở đây
+            notify.success(dataRes.message)
+
+            // Chỉ reload data, không notify
+            // await handleRefetchData()
+    
+        } catch (error) {
+            console.log("tạo giftCode nạp lỗi:",error)
+            notify.error("Đã có lỗi xảy ra")
+        } 
+        }
+
     return(
         <div className="px-5">
             <TitleAdmin
@@ -180,6 +221,22 @@ const GiftCodeClient = ({ dataStust, dataTableGiftCode }: IGiftCodeClient) => {
                     dataInGiftCode={dataViewTable}
                 />
             </div>
+
+
+            {/**
+             * Model
+             */}
+
+             {
+                isOpenModel && (
+                    <GiftModel
+                        optionItemSelect={opitonItem}
+                        open = {isOpenModel}
+                        onClose={() => setIsOpenModel(!isOpenModel)}
+                        actionModel={handleActionModel}
+                    />
+                )
+             }
         </div>
     )
 }

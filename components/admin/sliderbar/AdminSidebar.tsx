@@ -60,7 +60,7 @@ const menuGroups: MenuGroup[] = [
                 icon: Image,
             },
             {
-                title: "giftcode",
+                title: "Giftcode",
                 href: "/admin/giftcode",
                 icon: BadgePercent,
             },
