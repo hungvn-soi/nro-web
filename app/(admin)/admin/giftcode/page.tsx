@@ -1,16 +1,20 @@
-import GiftCodeClient from "@/components/admin/giftcode/GiftcodeClient"
-import { getAllGiftcodesV2, getGiftcodeStats } from "@/models/giftcode"
-import { getAllItemTemplates } from "@/models/itemTemplate"
+import GiftCodeClient from "@/components/admin/giftcode/GiftcodeClient";
+import {
+    getAllGiftcodesV2,
+    getGiftcodeStats,
+} from "@/models/giftcode";
+import { getAllItemTemplates } from "@/models/itemTemplate";
+
+export const dynamic = "force-dynamic";
 
 const GiftCodeAdmin = async () => {
-
     const [listGiftCode, stast, listItem] = await Promise.all([
         getAllGiftcodesV2(),
         getGiftcodeStats(),
-        getAllItemTemplates()
-    ])
+        getAllItemTemplates(),
+    ]);
 
-    return(
+    return (
         <div>
             <GiftCodeClient
                 dataStust={stast}
@@ -18,6 +22,7 @@ const GiftCodeAdmin = async () => {
                 opitonItem={listItem}
             />
         </div>
-    )
-}
-export default GiftCodeAdmin
+    );
+};
+
+export default GiftCodeAdmin;
