@@ -1,8 +1,9 @@
 import { db } from "@/db";
 import { giftcode } from "@/db/schema";
 import { giftcodeUsed } from "@/db/schema/giftcodeUsed";
+import { ApiError } from "@/lib/ApiError";
 import { ICreateGiftcode, IGiftcode, IStasGiftCode, IUpdateGiftcode, IViewTableGiftCode } from "@/types/giftcode";
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, ne, sql } from "drizzle-orm";
 
 /**
  * Lấy tất cả giftcode
@@ -19,6 +20,22 @@ export async function getAllGiftcodes(): Promise<IGiftcode[]> {
 export async function createGiftcode(
     data: ICreateGiftcode
 ): Promise<IGiftcode> {
+
+    // Kiểm tra code đã tồn tại chưa
+    const existing = await db
+        .select({ id: giftcode.id })
+        .from(giftcode)
+        .where(eq(giftcode.code, data.code))
+        .limit(1);
+
+    if (existing.length > 0) {
+        throw new ApiError(
+            "Giftcode đã tồn tại",
+            400,
+            "GIFT_CODE_EXISTS"
+        );
+    }
+
     const result = await db
         .insert(giftcode)
         .values({
@@ -38,12 +55,15 @@ export async function createGiftcode(
         .limit(1);
 
     if (!created[0]) {
-        throw new Error("Không thể lấy giftcode vừa tạo");
+        throw new ApiError(
+            "Không thể lấy giftcode vừa tạo",
+            500,
+            "GIFT_CODE_CREATE_FAILED"
+        );
     }
 
     return created[0];
 }
-
 /**
  * Cập nhật giftcode
  */
@@ -51,6 +71,28 @@ export async function updateGiftcode(
     data: IUpdateGiftcode
 ): Promise<IGiftcode> {
     const { id, ...updateData } = data;
+
+    // Nếu có thay đổi code thì kiểm tra code đã tồn tại chưa
+    if (data.code) {
+        const existing = await db
+            .select({ id: giftcode.id })
+            .from(giftcode)
+            .where(
+                and(
+                    eq(giftcode.code, data.code),
+                    ne(giftcode.id, id)
+                )
+            )
+            .limit(1);
+
+        if (existing.length > 0) {
+            throw new ApiError(
+                "Giftcode đã tồn tại",
+                400,
+                "GIFT_CODE_EXISTS"
+            );
+        }
+    }
 
     await db
         .update(giftcode)
@@ -64,12 +106,15 @@ export async function updateGiftcode(
         .limit(1);
 
     if (!updated[0]) {
-        throw new Error("Không tìm thấy giftcode");
+        throw new ApiError(
+            "Không tìm thấy giftcode",
+            404,
+            "GIFT_CODE_NOT_FOUND"
+        );
     }
 
     return updated[0];
 }
-
 
 /**
  * 
@@ -159,4 +204,32 @@ export async function getGiftcodeStats(): Promise<IStasGiftCode> {
         expiredGiftcodes: result?.expiredGiftcodes.toString() ?? 0,
         usedGiftcodes: usedResult?.usedGiftcodes.toString() ?? 0,
     };
+}
+
+
+/**
+ * Xóa giftcode
+ */
+export async function deleteGiftcode(id: number) {
+    // Kiểm tra giftcode có tồn tại không
+    const existing = await db
+        .select()
+        .from(giftcode)
+        .where(eq(giftcode.id, id))
+        .limit(1);
+
+    if (!existing[0]) {
+        throw new ApiError(
+            "Không tìm thấy giftcode",
+            404,
+            "GIFT_CODE_NOT_FOUND"
+        );
+    }
+
+    // Xóa
+    await db
+        .delete(giftcode)
+        .where(eq(giftcode.id, id));
+
+    return existing[0];
 }

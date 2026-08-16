@@ -9,9 +9,12 @@ interface IDataViewTable extends IViewTableGiftCode {
 
 interface ITableGiftCode{
     dataInGiftCode: IViewTableGiftCode[]
+    actionChiTiet: (data: IViewTableGiftCode) => void
+    actionDelte: (id:number) => void
+    
 }
 
-const TableGiftCode = ({ dataInGiftCode }: ITableGiftCode) =>{
+const TableGiftCode = ({ actionDelte, actionChiTiet, dataInGiftCode }: ITableGiftCode) =>{
     
     const [dataView, setDataView] = useState<IDataViewTable[] | null>(null)
 
@@ -83,7 +86,14 @@ const TableGiftCode = ({ dataInGiftCode }: ITableGiftCode) =>{
                             onClick={() => actionTible(row)}
                             className="flex h-8 w-full items-center justify-center rounded-md bg-blue-500 text-white hover:bg-blue-600"
                         >
-                            Chi tiết
+                            Chỉnh sửa
+                        </button>
+
+                        <button
+                            onClick={() => actionDelte(row.id)}
+                            className="flex h-8 w-full items-center justify-center rounded-md bg-red-400 text-white hover:bg-red-600"
+                        >
+                            Xóa
                         </button>
     
                     </div>
@@ -94,7 +104,8 @@ const TableGiftCode = ({ dataInGiftCode }: ITableGiftCode) =>{
     
 
     const actionTible =(row: IDataViewTable) => {
-        // actionInfo(row)
+        const { conlai, ...result } = row; 
+       actionChiTiet(result)
         
     }
     

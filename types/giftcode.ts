@@ -17,10 +17,10 @@ export interface ICreateGiftcode {
 
 export interface IUpdateGiftcode {
     id: number;
-    code?: string;
-    countLeft?: number;
-    detail?: string;
-    expired?: Date;
+    code: string;
+    countLeft: number;
+    detail: string;
+    expired: Date;
 }
 
 export interface IViewTableGiftCode {

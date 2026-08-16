@@ -3,104 +3,185 @@
 import LoadingOverlay from "@/components/LoadingOverlay"
 import { IItemTemplate } from "@/models/itemTemplate"
 import ItemSelect from "../ItemSelect"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Delete } from "lucide-react"
-import { ICreateGiftcode, IGiftcode } from "@/types/giftcode"
+import { useNotification } from "@/components/notification"
+import { IGiftcode } from "@/types/giftcode"
 
+interface IItemOption {
+    id: number
+    value: string | number
+}
 
 interface IItemGiftVoucher extends IItemTemplate {
     quantity: number
-    options:any[]
+    options: IItemOption[]
 }
 
 interface IGiftModel {
     optionItemSelect: IItemTemplate[]
     open: boolean
     onClose: () => void
-    actionModel: (data: ICreateGiftcode) => void
+    actionModel: (isEdit: boolean, data: IGiftcode) => void
+    isLoading: boolean
+    type: "Create" | "Edit" | null
+    itemSelect: IGiftcode | null
 }
 
+// Format a Date as YYYY-MM-DD using LOCAL time (avoids the UTC/timezone
+// shift you get from toISOString(), which can roll the date back a day
+// for users in UTC+ zones like Vietnam).
+const toLocalDateInputValue = (date: Date | string | undefined): string => {
+    if (!date) return ""
+    const d = new Date(date)
+    if (isNaN(d.getTime())) return ""
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}`
+}
 
+const emptyFormData: IGiftcode = {
+    id: -1,
+    code: "",
+    countLeft: 0,
+    detail: "",
+    datecreate: new Date(),
+    expired: new Date(),
+}
 
-const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel) => {
-    const [itemOptionSelect, setItemOptionSelect] = useState<IItemTemplate>();
+const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelect, actionModel }: IGiftModel) => {
+    const notify = useNotification()
+    const [itemOptionSelect, setItemOptionSelect] = useState<IItemTemplate>()
     const [listItemSelect, setListItemSelect] = useState<IItemGiftVoucher[]>([])
-    const [formData, setFormData] = useState({
-        giftCode: "",
-        quantity: 0,
-        fromDate: "",
-        toDate: "",
-    });
+    const isEdit = type === "Edit"
 
-    
-    if( !open ) {
-        setListItemSelect([])
+    const [formData, setFormData] = useState<IGiftcode>(emptyFormData)
+
+    // Reset the selected-items list whenever the modal closes, instead of
+    // doing it inline during render (calling setState during render is an
+    // anti-pattern and can trigger extra/incorrect re-renders).
+    useEffect(() => {
+        if (!open) {
+            setListItemSelect([])
+            setItemOptionSelect(undefined)
+        }
+    }, [open])
+
+    useEffect(() => {
+        if (!itemSelect) {
+            setFormData(emptyFormData)
+            setListItemSelect([])
+            return
+        }
+
+        setFormData({
+            id: itemSelect.id,
+            code: itemSelect.code,
+            countLeft: itemSelect.countLeft,
+            detail: itemSelect.detail,
+            datecreate: itemSelect.datecreate,
+            expired: itemSelect.expired,
+        })
+
+        let detailData: IItemGiftVoucher[] = []
+        try {
+            detailData =
+                typeof itemSelect.detail === "string"
+                    ? JSON.parse(itemSelect.detail)
+                    : itemSelect.detail ?? []
+        } catch (err) {
+            console.error("Không thể parse detail của GiftCode:", err)
+            notify.warning("Dữ liệu GiftCode bị lỗi định dạng, vui lòng kiểm tra lại")
+            setListItemSelect([])
+            return
+        }
+
+        const optionSelect: IItemTemplate[] = optionItemSelect.filter((b) =>
+            detailData.some((a) => a.id === b.id)
+        )
+
+        const result: IItemGiftVoucher[] = detailData.map((detail) => {
+            const option = optionSelect.find((item) => item.id === detail.id)
+
+            return {
+                ...detail,
+                name: option?.name ?? "No Name",
+                iconId: option?.iconId ?? 0,
+            }
+        })
+
+        setListItemSelect(result)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemSelect, optionItemSelect])
+
+    if (!open) {
         return null
     }
 
-
     const handleAddListItemSelect = () => {
         if (!itemOptionSelect) {
-            alert("Vui lòng chọn item cần thêm");
-            return;
+            notify.warning("Vui lòng chọn item cần thêm")
+            return
         }
 
-        const isExist = listItemSelect.some(
-            item => item.id === itemOptionSelect.id
-        );
+        const isExist = listItemSelect.some((item) => item.id === itemOptionSelect.id)
 
         if (isExist) {
-            alert("Item đã tồn tại vui lòng kiểm tra lại");
-            return;
+            notify.warning("Item đã tồn tại vui lòng kiểm tra lại")
+            return
         }
-        const itemAdd: IItemGiftVoucher  = {
+        const itemAdd: IItemGiftVoucher = {
             ...itemOptionSelect,
             quantity: 1,
-            options:[]
+            options: [],
         }
 
-        setListItemSelect(prev => [...prev, itemAdd]);
+        setListItemSelect((prev) => [...prev, itemAdd])
     }
 
     const handleDeleteItemList = (id: number) => {
-
-        setListItemSelect(prev => prev.filter(item => item.id !== id));
+        setListItemSelect((prev) => prev.filter((item) => item.id !== id))
     }
-    
-    const handleChangeQuantity = (id: number, quantity: number) => {
-        setListItemSelect(prev =>
-            prev.map(item =>
-                item.id === id ? { ...item, quantity } : item
-            )
-        );
-    };
-    
 
+    const handleChangeQuantity = (id: number, quantity: number) => {
+        setListItemSelect((prev) =>
+            prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+        )
+    }
 
     const handleSaveGiftCode = () => {
-
-        if(!formData.giftCode)
-            {
-                alert("Mã gircode rỗng")
-                return
-            }
-        if(formData.quantity <= 0){
-            alert("số lượng voucher phải > 0")
+        if (!formData.code.trim()) {
+            notify.warning("Mã giftcode rỗng")
             return
-        } 
-        if (formData.fromDate && formData.toDate) {
-            if (formData.fromDate && formData.toDate) {
-                const start = new Date(formData.toDate);   // toDate = ngày bắt đầu
-                const end = new Date(formData.fromDate);    // fromDate = ngày kết thúc
-
-                if (end <= start) {
-                    alert("Kiểm tra lại ngày kết thúc phải lớn hơn ngày bắt đầu");
-                    return;
-                }
-            }
         }
-        if(!formData.fromDate || !formData.toDate){
-            alert("Kiểm tra lại thời gian giftCode")
+        if (Number(formData.countLeft) <= 0) {
+            notify.warning("Số lượng voucher phải > 0")
+            return
+        }
+        if (!formData.datecreate || !formData.expired) {
+            notify.warning("Kiểm tra lại thời gian giftCode")
+            return
+        }
+
+        const start = new Date(formData.datecreate)
+        const end = new Date(formData.expired)
+        start.setHours(0, 0, 0, 0)
+        end.setHours(0, 0, 0, 0)
+
+        if (end < start) {
+            notify.warning("Kiểm tra lại ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu")
+            return
+        }
+
+        if (listItemSelect.length <= 0) {
+            notify.warning("Vui lòng chọn Item cho GiftCode")
+            return
+        }
+
+        const invalidQuantityItem = listItemSelect.find((item) => !item.quantity || item.quantity <= 0)
+        if (invalidQuantityItem) {
+            notify.warning(`Số lượng của item "${invalidQuantityItem.name}" phải > 0`)
             return
         }
 
@@ -111,45 +192,39 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
                 id: option.id,
                 param: option.value,
             })),
-        }));
+        }))
 
-        const dataCreateGift: ICreateGiftcode = {
-            code: formData.giftCode,
-            countLeft: formData.quantity,
+        const itemGiftCode: IGiftcode = {
+            id: formData.id,
+            code: formData.code,
+            countLeft: Number(formData.countLeft),
             detail: JSON.stringify(detail),
-            datecreate: new Date(formData.toDate),
-            expired: new Date(formData.fromDate)
+            datecreate: new Date(formData.datecreate),
+            expired: new Date(formData.expired),
         }
 
-        actionModel(dataCreateGift)
+        actionModel(isEdit, itemGiftCode)
     }
 
+    // Form ...................
 
-    //Form ...................
-
-    const handleOnChangForm = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { name, value } = e.target;
+    const handleOnChangForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type: inputType } = e.target
 
         setFormData((prev) => ({
             ...prev,
-            [name]: value,
-        }));
-    };
-    
-    
+            [name]: inputType === "number" ? Number(value) : value,
+        }))
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 pt-5">
             <div className="relative w-full max-w-[900px] rounded-lg bg-white shadow-xl py-5">
-                <LoadingOverlay
-                    show={false}
-                />
+                <LoadingOverlay show={isLoading} />
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
                     <h2 className="text-[20px] font-semibold text-gray-900">
-                        Thêm mới gói nạp
+                        {isEdit ? "Cập nhật GiftCode" : "Thêm mới GiftCode"}
                     </h2>
 
                     <button
@@ -161,15 +236,14 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
                     </button>
                 </div>
 
-                <form 
+                <form
                     noValidate
                     onSubmit={(e) => {
                         e.preventDefault()
-                        // handleAction()
                     }}
-                    className="px-5 py-4">
-                    
-                   <div className="grid grid-cols-2 gap-2">
+                    className="px-5 py-4"
+                >
+                    <div className="grid grid-cols-2 gap-2">
                         <div className="mb-4">
                             <label className="mb-2 block text-[16px] font-medium text-gray-800">
                                 Mã GiftCode <span className="text-red-500">*</span>
@@ -177,11 +251,11 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
 
                             <input
                                 type="text"
-                                name="giftCode"
-                                value={formData.giftCode}
+                                name="code"
+                                value={formData.code}
                                 onChange={handleOnChangForm}
-                                placeholder="ABC-123 Tối đa 6 ký tự"
-                                maxLength={6}
+                                placeholder="Nhập mã giftcode"
+                                maxLength={20}
                                 className="h-10.5 w-full rounded-md border border-gray-200 px-3 text-[20px] text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                             />
                         </div>
@@ -193,8 +267,8 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
 
                             <input
                                 type="number"
-                                name="quantity"
-                                value={formData.quantity}
+                                name="countLeft"
+                                value={formData.countLeft}
                                 onChange={handleOnChangForm}
                                 min={0}
                                 max={1000}
@@ -202,7 +276,6 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
                                 required
                                 className="h-10.5 w-full rounded-md border border-gray-200 px-3 text-[20px] text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                             />
-
                         </div>
 
                         <div className="mb-4">
@@ -215,54 +288,51 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
                                     items={optionItemSelect}
                                     value={itemOptionSelect?.id}
                                     onChange={(item) => {
-                                        setItemOptionSelect(item);
+                                        setItemOptionSelect(item)
                                     }}
                                 />
 
                                 <button
+                                    type="button"
                                     className="cursor-pointer rounded-md border-2 border-green-500 text-green-500 h-10.5 px-3"
                                     onClick={handleAddListItemSelect}
                                 >
                                     + Thêm
                                 </button>
-
                             </div>
-                            
                         </div>
 
                         <div className="mb-4">
                             <label className="mb-2 block text-[16px] font-medium text-gray-800">
-                                Thời gian hiệu lực ( từ ngày  đến  ngày) <span className="text-red-500">*</span>
+                                Thời gian hiệu lực ( từ ngày đến ngày) <span className="text-red-500">*</span>
                             </label>
 
                             <div className="flex items-center gap-3">
                                 <input
                                     type="date"
-                                    name="toDate"
-                                    value={formData.toDate}
+                                    name="datecreate"
+                                    value={toLocalDateInputValue(formData.datecreate)}
                                     onChange={handleOnChangForm}
                                     className="
                                         h-10.5
                                         min-w-0 flex-1 bg-transparent
                                         text-[18px] text-black
-                                        
+
                                         border border-slate-200
                                         rounded-md
                                         px-3
                                     "
                                 />
-
-
                                 <input
                                     type="date"
-                                    name="fromDate"
-                                    value={formData.fromDate}
+                                    name="expired"
+                                    value={toLocalDateInputValue(formData.expired)}
                                     onChange={handleOnChangForm}
                                     className="
                                         h-10.5
                                         min-w-0 flex-1 bg-transparent
                                         text-[18px] text-black
-                                        
+
                                         border border-slate-200
                                         rounded-md
                                         px-3
@@ -270,33 +340,31 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
                                 />
                             </div>
                         </div>
-                   </div>
-
+                    </div>
                 </form>
 
                 <label className="mb-2 block text-[20px] font-medium text-gray-800 px-5">
                     Danh sách Item đã chọn:
                 </label>
 
-                <div className="px-5">
-                    {
-                        listItemSelect.map((item) => (
-                            <BoxItemSelect
-                                key={item.id}
-                                dataBox={item}
-                                actionDelteItem={handleDeleteItemList}
-                                handleChangeQuantity={handleChangeQuantity}
-                            />
-                        ))
-                    }
-                    
+                <div className="max-h-[450px] overflow-y-auto pr-2 px-5 mt-5">
+                    {listItemSelect.map((item) => (
+                        <BoxItemSelect
+                            key={item.id}
+                            dataBox={item}
+                            actionDelteItem={handleDeleteItemList}
+                            handleChangeQuantity={handleChangeQuantity}
+                        />
+                    ))}
                 </div>
 
-                <button 
-                    className="px-3 py-2 border-2 border-green-500 rounded-md mt-5"
+                <button
+                    type="button"
+                    disabled={isLoading}
+                    className="px-3 py-2 border-2 border-green-500 rounded-md mt-5 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => handleSaveGiftCode()}
                 >
-                    Lưu
+                    {isEdit ? "Cập Nhật" : "Tạo Mới"}
                 </button>
             </div>
         </div>
@@ -305,48 +373,31 @@ const GiftModel = ({ open, onClose, optionItemSelect, actionModel }: IGiftModel)
 
 export default GiftModel
 
-
-interface IBoxItemSelect{
+interface IBoxItemSelect {
     dataBox: IItemGiftVoucher
-    actionDelteItem: (id:number) => void
+    actionDelteItem: (id: number) => void
     handleChangeQuantity: (id: number, quantity: number) => void
 }
 const BoxItemSelect = ({ dataBox, handleChangeQuantity, actionDelteItem }: IBoxItemSelect) => {
-    return(
+    return (
         <div className="mt-2">
-            {/* <Image
-                src={"https://picsum.photos/52/52"}
-                alt="ảnh item"
-                width={52}
-                height={52}
-                className="object-contain"
-            /> */}
-
             <div className="grid grid-cols-[70%_20%] justify-between items-center border border-gray-400 p-2 rounded-md">
                 <div className="flex justify-start gap-10 items-center">
-                    <div
-                        className="w-[52px] h-[52px] text-center border bg-gray-100 border-gray-400 rounded-md flex justify-center items-center"
-                    >
+                    <div className="w-[52px] h-[52px] text-center border bg-gray-100 border-gray-400 rounded-md flex justify-center items-center">
                         {dataBox.iconId}
                     </div>
 
                     <div className="flex justify-center items-center flex-1 gap-2">
                         <div className="mb-4 w-full">
-                            <label className="mb-2 block text-[16px] font-medium text-gray-800">
-                                Vật phẩm
-                            </label>
+                            <label className="mb-2 block text-[16px] font-medium text-gray-800">Vật phẩm</label>
 
-                            <div
-                                className="h-10.5 w-full flex justify-between items-center rounded-md border border-gray-200 px-3 text-[20px] text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                            >
+                            <div className="h-10.5 w-full flex justify-between items-center rounded-md border border-gray-200 px-3 text-[20px] text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                 {dataBox.name}
                                 <span>{`Id: ${dataBox.id}`}</span>
                             </div>
                         </div>
                         <div className="mb-4 w-full">
-                            <label className="mb-2 block text-[16px] font-medium text-gray-800">
-                                Số lượng
-                            </label>
+                            <label className="mb-2 block text-[16px] font-medium text-gray-800">Số lượng</label>
 
                             <input
                                 type="number"
@@ -362,6 +413,7 @@ const BoxItemSelect = ({ dataBox, handleChangeQuantity, actionDelteItem }: IBoxI
                 </div>
 
                 <button
+                    type="button"
                     className="cursor-pointer h-10.5 w-20 rounded-md px-2 py-2 border border-red-500 text-red-500 flex justify-center items-center gap-3"
                     onClick={() => actionDelteItem(dataBox.id)}
                 >
@@ -372,10 +424,3 @@ const BoxItemSelect = ({ dataBox, handleChangeQuantity, actionDelteItem }: IBoxI
         </div>
     )
 }
-
-
-// const BoxItemOption = () => {
-//     return(
-
-//     )
-// }
