@@ -140,6 +140,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
             quantity: 1,
             options: [],
         }
+        setIsOnchang(true)
         setListItem((prev) => [...prev, itemOptionSelect])
         setListItemSelect((prev) => [...prev, itemAdd])
     }
@@ -229,18 +230,20 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
     const handleCloseModel = () =>{
         if(isOnChang) {
             notify.confirm({
-                title:"Thông Báo",
-                message:"Có thay đổi dữ liệu chư lưu, Bạn có chắc chắn thoát dữ liệu thay đỏi sẽ không được lưu",
+                title:"THOÁT FORM GIFTCODE",
+                message:"Dữ liệu có thay đổi ? Nếu XÁC NHẬN dữ liệu sẽ không được lưu lại",
                 onConfirm() {
-                    onClose()
                     setIsOnchang(false)
-                    return
+                    onClose()
                 },
             })
+
+            return
         }
         if(!isLoading){
-            onClose()
             setIsOnchang(false)
+            onClose()
+            return
         }
     }
 
