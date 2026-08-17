@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
+import { getItemImage } from "./giftcode/GetItemImage";
 
 interface IItem {
     id: number;
@@ -13,16 +14,17 @@ interface ItemSelectProps {
     items: IItem[];
     value?: number;
     onChange: (item: IItem) => void;
+    listSelect?: IItem[]
 }
 
 export default function ItemSelect({
     items,
     value,
     onChange,
+    listSelect,
 }: ItemSelectProps) {
     const [open, setOpen] = useState(false);
     const [keyword, setKeyword] = useState("");
-
     const selectedItem = useMemo(() => {
         return items.find((item) => item.id === value);
     }, [items, value]);
@@ -31,20 +33,29 @@ export default function ItemSelect({
     const displayItems = useMemo(() => {
         const search = keyword.trim().toLowerCase();
 
-        if (!search) {
-            return items.slice(0, 15);
-        }
+        // Lọc theo search trước
+        const filteredItems = !search
+            ? items
+            : items.filter((item) =>
+                item.name.toLowerCase().includes(search) ||
+                String(item.id).includes(search)
+            );
 
-        return items
-            .filter((item) => {
-                return (
-                    item.name.toLowerCase().includes(search) ||
-                    String(item.id).includes(search)
-                );
-            })
-            .slice(0, 15);
-    }, [items, keyword]);
+        // Item đã được add
+        const selectedItems = filteredItems.filter(item =>
+            listSelect?.some(row => row.id === item.id)
+        );
 
+        // Item chưa được add
+        const otherItems = filteredItems.filter(item =>
+            !listSelect?.some(row => row.id === item.id)
+        );
+
+        // Đưa item đã add lên đầu, sau đó lấy thêm cho đủ 15
+        return [...selectedItems, ...otherItems].slice(0, 10);
+    }, [items, keyword, listSelect]);
+
+    console.log("check data list đã dc add: ", listSelect)
     return (
         <div className="relative w-full">
             {/* Selected */}
@@ -64,7 +75,17 @@ export default function ItemSelect({
                 {selectedItem ? (
                     <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-100">
-                            {selectedItem.iconId}
+                            {/* {selectedItem.iconId} */}
+                            <img
+                                key={selectedItem.id}
+                                src={getItemImage(selectedItem.iconId)}
+                                alt={selectedItem.name}
+                                width={32}
+                                height={32}
+                                onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                }}
+                            />
                         </div>
 
                         <div className="text-left flex justify-center items-center gap-4">
@@ -142,7 +163,9 @@ export default function ItemSelect({
                         {displayItems.length > 0 ? (
                             displayItems.map((item) => {
                                 const selected = item.id === value;
-
+                                const isAdded = listSelect?.some(
+                                    row => row.id === item.id
+                                ) ?? false;
                                 return (
                                     <button
                                         key={item.id}
@@ -165,6 +188,11 @@ export default function ItemSelect({
                                                 ? "bg-blue-50"
                                                 : ""
                                             }
+                                            ${
+                                                isAdded 
+                                                ? "bg-[#8bc6ff54]" 
+                                                : ""
+                                            }
                                         `}
                                     >
                                         {/* Icon */}
@@ -177,7 +205,16 @@ export default function ItemSelect({
                                                 text-xs
                                             "
                                         >
-                                            {item.iconId}
+                                            {/* {item.iconId} */}
+                                            <img
+                                                src={getItemImage(item.iconId)}
+                                                alt={item.name}
+                                                width={32}
+                                                height={32}
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                }}
+                                            /> 
                                         </div>
 
                                         {/* Info */}

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { Delete } from "lucide-react"
 import { useNotification } from "@/components/notification"
 import { IGiftcode } from "@/types/giftcode"
+import { getItemImage } from "./GetItemImage"
 
 interface IItemOption {
     id: number
@@ -54,16 +55,18 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
     const notify = useNotification()
     const [itemOptionSelect, setItemOptionSelect] = useState<IItemTemplate>()
     const [listItemSelect, setListItemSelect] = useState<IItemGiftVoucher[]>([])
+    const [listItem, setListItem] = useState <IItemTemplate[]>([])
     const isEdit = type === "Edit"
 
     const [formData, setFormData] = useState<IGiftcode>(emptyFormData)
-
+    const [isOnChang, setIsOnchang] = useState<boolean>(false)
     // Reset the selected-items list whenever the modal closes, instead of
     // doing it inline during render (calling setState during render is an
     // anti-pattern and can trigger extra/incorrect re-renders).
     useEffect(() => {
         if (!open) {
             setListItemSelect([])
+            setListItem([])
             setItemOptionSelect(undefined)
         }
     }, [open])
@@ -72,6 +75,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
         if (!itemSelect) {
             setFormData(emptyFormData)
             setListItemSelect([])
+            setListItem([])
             return
         }
 
@@ -100,7 +104,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
         const optionSelect: IItemTemplate[] = optionItemSelect.filter((b) =>
             detailData.some((a) => a.id === b.id)
         )
-
+        
         const result: IItemGiftVoucher[] = detailData.map((detail) => {
             const option = optionSelect.find((item) => item.id === detail.id)
 
@@ -110,7 +114,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
                 iconId: option?.iconId ?? 0,
             }
         })
-
+        setListItem(optionSelect)
         setListItemSelect(result)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [itemSelect, optionItemSelect])
@@ -136,15 +140,19 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
             quantity: 1,
             options: [],
         }
-
+        setListItem((prev) => [...prev, itemOptionSelect])
         setListItemSelect((prev) => [...prev, itemAdd])
     }
 
     const handleDeleteItemList = (id: number) => {
+        setIsOnchang(true)
         setListItemSelect((prev) => prev.filter((item) => item.id !== id))
+        setListItem((prev) => prev.filter((item) => item.id !== id))
+
     }
 
     const handleChangeQuantity = (id: number, quantity: number) => {
+        setIsOnchang(true)
         setListItemSelect((prev) =>
             prev.map((item) => (item.id === id ? { ...item, quantity } : item))
         )
@@ -209,12 +217,31 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
     // Form ...................
 
     const handleOnChangForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsOnchang(true)
         const { name, value, type: inputType } = e.target
 
         setFormData((prev) => ({
             ...prev,
             [name]: inputType === "number" ? Number(value) : value,
         }))
+    }
+
+    const handleCloseModel = () =>{
+        if(isOnChang) {
+            notify.confirm({
+                title:"Thông Báo",
+                message:"Có thay đổi dữ liệu chư lưu, Bạn có chắc chắn thoát dữ liệu thay đỏi sẽ không được lưu",
+                onConfirm() {
+                    onClose()
+                    setIsOnchang(false)
+                    return
+                },
+            })
+        }
+        if(!isLoading){
+            onClose()
+            setIsOnchang(false)
+        }
     }
 
     return (
@@ -287,6 +314,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
                                 <ItemSelect
                                     items={optionItemSelect}
                                     value={itemOptionSelect?.id}
+                                    listSelect={listItem}
                                     onChange={(item) => {
                                         setItemOptionSelect(item)
                                     }}
@@ -347,7 +375,7 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
                     Danh sách Item đã chọn:
                 </label>
 
-                <div className="max-h-[450px] overflow-y-auto pr-2 px-5 mt-5">
+                <div className="max-h-[350px] overflow-y-auto pr-2 px-5 mt-5">
                     {listItemSelect.map((item) => (
                         <BoxItemSelect
                             key={item.id}
@@ -358,14 +386,25 @@ const GiftModel = ({ itemSelect, type, isLoading, open, onClose, optionItemSelec
                     ))}
                 </div>
 
-                <button
-                    type="button"
-                    disabled={isLoading}
-                    className="px-3 py-2 border-2 border-green-500 rounded-md mt-5 disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={() => handleSaveGiftCode()}
-                >
-                    {isEdit ? "Cập Nhật" : "Tạo Mới"}
-                </button>
+               <div className="px-5 flex gap-5">
+                    <button
+                        type="button"
+                        disabled={isLoading}
+                        className="cursor-pointer border-gray-300 text-white font-bold px-3 py-2 border-2 bg-blue-500 hover:bg-blue-600 rounded-md mt-5 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => handleSaveGiftCode()}
+                    >
+                        {isEdit ? "Cập Nhật" : "Tạo Mới"}
+                    </button>
+
+                    <button
+                        type="button"
+                        disabled={isLoading}
+                        className="text-white font-bold cursor-pointer px-3 py-2 border-2 bg-red-500 border-gray-300 hover:bg-red-600 rounded-md mt-5 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => handleCloseModel()}
+                    >
+                        Thoát
+                    </button>
+               </div>
             </div>
         </div>
     )
@@ -379,24 +418,44 @@ interface IBoxItemSelect {
     handleChangeQuantity: (id: number, quantity: number) => void
 }
 const BoxItemSelect = ({ dataBox, handleChangeQuantity, actionDelteItem }: IBoxItemSelect) => {
+    const [imageError, setImageError] = useState(false);
     return (
         <div className="mt-2">
-            <div className="grid grid-cols-[70%_20%] justify-between items-center border border-gray-400 p-2 rounded-md">
+            <div className="grid grid-cols-[70%_20%] justify-around items-center border border-gray-400 p-2 rounded-md">
                 <div className="flex justify-start gap-10 items-center">
-                    <div className="w-[52px] h-[52px] text-center border bg-gray-100 border-gray-400 rounded-md flex justify-center items-center">
-                        {dataBox.iconId}
+                    <div className={`w-[52px] h-[52px] ${imageError ? "bg-gray-100 border-gray-400 rounded-md": ""} text-center  flex justify-center items-center`}>
+                        {/* {dataBox.iconId} */}
+                        <img
+                            src={getItemImage(dataBox.iconId)}
+                            alt={dataBox.name}
+                            width={52}
+                            height={52}
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                setImageError(true)
+                            }}
+                        />
+                        {
+                            imageError && (
+                                <div
+                                    className="bg-gray-100 border-gray-400 rounded-md"
+                                >
+                                    {dataBox.iconId}
+                                </div>
+                            )
+                        }
                     </div>
 
-                    <div className="flex justify-center items-center flex-1 gap-2">
+                    <div className="flex-1 grid grid-cols-[70%_25%] justify-between">
                         <div className="mb-4 w-full">
                             <label className="mb-2 block text-[16px] font-medium text-gray-800">Vật phẩm</label>
 
-                            <div className="h-10.5 w-full flex justify-between items-center rounded-md border border-gray-200 px-3 text-[20px] text-gray-800 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                            <div className="h-10.5 w-full flex justify-between items-center rounded-md border border-gray-200 px-3 text-[20px] text-black placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                                 {dataBox.name}
                                 <span>{`Id: ${dataBox.id}`}</span>
                             </div>
                         </div>
-                        <div className="mb-4 w-full">
+                        <div className=" w-full">
                             <label className="mb-2 block text-[16px] font-medium text-gray-800">Số lượng</label>
 
                             <input
@@ -412,14 +471,16 @@ const BoxItemSelect = ({ dataBox, handleChangeQuantity, actionDelteItem }: IBoxI
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    className="cursor-pointer h-10.5 w-20 rounded-md px-2 py-2 border border-red-500 text-red-500 flex justify-center items-center gap-3"
-                    onClick={() => actionDelteItem(dataBox.id)}
-                >
-                    <Delete />
-                    Xóa
-                </button>
+                <div className="flex justify-end items-end">
+                    <button
+                        type="button"
+                        className="cursor-pointer border-gray-300 h-10.5 w-20 rounded-md px-2 py-2 border hover:bg-red-600 text-white bg-red-500 border-red-40 flex justify-center items-center gap-3"
+                        onClick={() => actionDelteItem(dataBox.id)}
+                    >
+                        <Delete />
+                        Xóa
+                    </button>
+                </div>
             </div>
         </div>
     )

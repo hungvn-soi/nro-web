@@ -84,14 +84,14 @@ const TableGiftCode = ({ actionDelte, actionChiTiet, dataInGiftCode }: ITableGif
                     <div className="flex gap-2">
                         <button
                             onClick={() => actionTible(row)}
-                            className="flex h-8 w-full items-center justify-center rounded-md bg-blue-500 text-white hover:bg-blue-600"
+                            className="cursor-pointer flex h-8 w-full items-center justify-center rounded-md bg-blue-500 text-white hover:bg-blue-600"
                         >
                             Chỉnh sửa
                         </button>
 
                         <button
                             onClick={() => actionDelte(row.id)}
-                            className="flex h-8 w-full items-center justify-center rounded-md bg-red-400 text-white hover:bg-red-600"
+                            className="cursor-pointer flex h-8 w-full items-center justify-center rounded-md bg-red-400 text-white hover:bg-red-600"
                         >
                             Xóa
                         </button>

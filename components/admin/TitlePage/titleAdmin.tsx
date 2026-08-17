@@ -19,7 +19,7 @@ const TitleAdmin = ({ title, subTitle, actionAdd, viewAdd = true}: ITitleAdmin) 
                 {
                     viewAdd && (
                         <button
-                            className="flex justify-center items-center py-2 px-3 bg-blue-600 hover:bg-blue-800 rounded-xl active:scale-0.8 text-white"
+                            className="cursor-pointer flex justify-center items-center py-2 px-3 bg-blue-600 hover:bg-blue-800 rounded-xl active:scale-0.8 text-white"
                             onClick={actionAdd}
                         >
                             <Plus size={20} />
