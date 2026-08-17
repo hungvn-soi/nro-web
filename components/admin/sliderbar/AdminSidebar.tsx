@@ -65,8 +65,8 @@ const menuGroups: MenuGroup[] = [
                 icon: BadgePercent,
             },
             {
-                title: "Bảo trì",
-                href: "/admin/maintenance",
+                title: "GAME",
+                href: "/admin/panel-game",
                 icon: Wrench,
             },
         ],
