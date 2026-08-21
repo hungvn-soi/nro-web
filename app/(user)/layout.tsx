@@ -2,6 +2,7 @@ import AuthModal from "@/components/auth/AuthModal";
 import BannerV2 from "@/components/banner/MainBannerV2";
 import Footer from "@/components/footter/Footer";
 import Header from "@/components/header/Header";
+import PromotionPopup from "@/components/PromotionPopupProps";
 import ZaloFloatingButton from "@/components/ZaloBox";
 import { AuthProvider } from "@/lib/context/AuthContext";
 
@@ -35,6 +36,7 @@ export default function AdminPage({
 
             {/* className="relative z-10 flex-1 max-w-7xl mx-auto px-4 w-full */}
                 <main className="">
+                    <PromotionPopup />
                     {children}
                 </main>
 
